@@ -9,6 +9,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
+import { updateInvoice } from '@/app/lib/actions';
 
 export default function EditInvoiceForm({
   invoice,
@@ -17,8 +18,22 @@ export default function EditInvoiceForm({
   invoice: InvoiceForm;
   customers: CustomerField[];
 }) {
+  /* Function Invocation: 
+   * In JavaScript, when you include parentheses after a function name (e.g., updateInvoice(id)), it immediately invokes the function.
+   * This means the function updateInvoice is executed at the moment the JSX is rendered, not when the form is submitted. 
+   * Since forms need to submit data upon user action (like clicking a submit button), invoking the function immediately doesn't align with the intended behavior.  
+   */
+
+  /* HTML Form Submission: 
+   * HTML forms traditionally work by submitting data to a URL specified in the action attribute.
+   * When a form is submitted, the browser makes a request to the URL specified in the action attribute.
+   * However, in Next.js Server Actions, the action attribute doesn't point to a traditional URL but rather to a JavaScript function that handles form submission. 
+   * This function needs to be called with the appropriate context (i.e., event handlers) to correctly handle the form data.
+   */
+  const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
+
   return (
-    <form>
+    <form action={updateInvoiceWithId}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
@@ -108,7 +123,7 @@ export default function EditInvoiceForm({
             </div>
           </div>
         </fieldset>
-      </div>
+      </div >
       <div className="mt-6 flex justify-end gap-4">
         <Link
           href="/dashboard/invoices"
@@ -118,6 +133,6 @@ export default function EditInvoiceForm({
         </Link>
         <Button type="submit">Edit Invoice</Button>
       </div>
-    </form>
+    </form >
   );
 }
