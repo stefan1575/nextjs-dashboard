@@ -12,9 +12,8 @@ import { authClient } from "@/lib/auth-client";
 import { SignUpSchema } from "@/lib/auth.schema"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
 import { useState } from "react"
-import { GoogleLogo } from "@/components/icons/google-logo"
 import { useRouter } from "next/navigation"
-
+import { GoogleButton } from "@/components/google-button"
 
 type FormFields = z.infer<typeof SignUpSchema>
 
@@ -46,7 +45,7 @@ export function SignupForm({
       password: values.password,
     }, {
       onSuccess: () => {
-        router.push("/dashboard")
+        router.replace("/dashboard")
       },
       onError: (ctx) => {
         setError("email", { type: "custom", message: ctx.error.message })
@@ -111,26 +110,22 @@ export function SignupForm({
             </p>
           )}
         </div>
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting ? (
-            <>
-              <Loader2 className="animate-spin"
-              />
-              Loading...
-            </>
-          ) : (
-            "Create an account"
-          )}
-        </Button>
+        {isSubmitting ? (
+          <Button type="submit" className="w-full" disabled>
+            <Loader2 className="animate-spin" />
+            Loading...
+          </Button>
+        ) : (
+          <Button type="submit" className="w-full" disabled={isSubmitting}>
+            Create an account
+          </Button>
+        )}
         <div className="font-bold relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
           <span className="relative z-10 bg-background px-2 text-muted-foreground">
             Or continue with
           </span>
         </div>
-        <Button type="button" variant="outline">
-          <GoogleLogo />
-          Sign up with Google
-        </Button>
+        <GoogleButton>Sign up with Google</GoogleButton>
       </div>
       <div className="text-center text-sm">
         Already have an account?{" "}

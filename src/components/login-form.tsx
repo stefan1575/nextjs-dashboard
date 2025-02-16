@@ -19,8 +19,8 @@ import { authClient } from "@/lib/auth-client";
 import { LoginSchema } from "@/lib/auth.schema"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
 import { useState } from "react"
-import { GoogleLogo } from "@/components/icons/google-logo"
 import { useRouter } from "next/navigation"
+import { GoogleButton } from "@/components/google-button"
 
 type FormFields = z.infer<typeof LoginSchema>
 
@@ -51,7 +51,7 @@ export function LoginForm({
       password: values.password,
     }, {
       onSuccess: () => {
-        router.push("/dashboard")
+        router.replace("/dashboard")
       },
       onError: (ctx) => {
         setError("password", { type: "custom", message: ctx.error.message })
@@ -119,25 +119,22 @@ export function LoginForm({
                   <p className="text-red-400 text-sm">⚠ {errors.password.message}</p>
                 )}
               </div>
-              <Button type="submit" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="animate-spin" />
-                    Loading...
-                  </>
-                ) : (
-                  "Login"
-                )}
-              </Button>
+              {isSubmitting ? (
+                <Button type="submit" className="w-full" disabled>
+                  <Loader2 className="animate-spin" />
+                  Loading...
+                </Button>
+              ) : (
+                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                  Login
+                </Button>
+              )}
               <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
                 <span className="relative z-10 bg-background px-2 text-muted-foreground">
                   Or continue with
                 </span>
               </div>
-              <Button type="button" variant="outline">
-                <GoogleLogo />
-                Sign in with Google
-              </Button>
+              <GoogleButton>Sign in with Google</GoogleButton>
             </div>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}
