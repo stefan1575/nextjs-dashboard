@@ -1,8 +1,6 @@
 import prisma from "@/lib/prisma";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-// used to get cookies from the request object which enables redirecting to the dashboard after sign up
-import { nextCookies } from "better-auth/next-js";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -23,5 +21,10 @@ export const auth = betterAuth({
       redirectURI: process.env.BETTER_AUTH_URL + "/api/auth/callback/github",
     },
   },
-  plugins: [nextCookies()], // make sure nextCookies last plugin in the array
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60, // Cache duration in seconds
+    },
+  },
 });

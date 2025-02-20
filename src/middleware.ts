@@ -1,35 +1,30 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionCookie } from "better-auth";
 
-const UNAUTHENTICATED_PATHS = ["/", "/login"];
-const LOGIN_PATH = "/login";
-const DASHBOARD_PATH = "/dashboard";
-
 export async function middleware(request: NextRequest) {
   try {
-    const sessionCookie = await getSessionCookie(request);
+    const pathname = request.nextUrl.pathname;
+    const sessionCookie = getSessionCookie(request);
 
+    // Redirect unauthenticated users away from dashboard
     if (
       !sessionCookie &&
-      !UNAUTHENTICATED_PATHS.includes(request.nextUrl.pathname)
+      (pathname.startsWith("/dashboard") || pathname.startsWith("/dashboard/"))
     ) {
-      return NextResponse.redirect(new URL(LOGIN_PATH, request.url));
+      return NextResponse.redirect(new URL("/login", request.url));
     }
 
-    if (
-      sessionCookie &&
-      UNAUTHENTICATED_PATHS.includes(request.nextUrl.pathname)
-    ) {
-      return NextResponse.redirect(new URL(DASHBOARD_PATH, request.url));
+    // Redirect authenticated users away from login/root only if they're specifically on those paths
+    if (sessionCookie && (pathname === "/" || pathname === "/login")) {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
     }
 
     return NextResponse.next();
-  } catch (error) {
-    console.error("Middleware error:", error);
-    return NextResponse.redirect(new URL(LOGIN_PATH, request.url));
+  } catch {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 }
 
 export const config = {
-  matcher: ["/", "/login", "/dashboard"],
+  matcher: ["/", "/login", "/dashboard", "/dashboard/:path*"],
 };
