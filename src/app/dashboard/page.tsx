@@ -1,22 +1,13 @@
-import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
-
-// import { redirect } from 'next/navigation';
-import LogoutButton from '@/components/logout-button';
 
 export default async function Page() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
-
-  if (!session) {
-    throw Error("The user is not authenticated please login")
-  }
-
   return (
-    <div>
-      hi {session.user.email}
-      <LogoutButton />
-    </div>
+    <>
+      <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+        <div className="aspect-video rounded-xl bg-muted/50" />
+        <div className="aspect-video rounded-xl bg-muted/50" />
+        <div className="aspect-video rounded-xl bg-muted/50" />
+      </div>
+      <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" />
+    </>
   )
 }
