@@ -1,10 +1,9 @@
 import { GalleryVerticalEnd } from "lucide-react"
-
-import { SignupForm } from "@/components/signup-form"
+import { SignupForm } from "@/components/forms/signup-form"
 import Link from "next/link"
 import Image from "next/image"
 
-export default function LoginPage() {
+export default function Page() {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
