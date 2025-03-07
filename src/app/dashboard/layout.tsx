@@ -1,6 +1,6 @@
 import { AppNavbar } from "@/components/app-navbar"
 import { AppSidebar } from "@/components/app-sidebar"
-import DashboardSkeleton from "@/components/dashboard-skeleton"
+import { DashboardSkeleton } from "@/components/dashboard-skeleton"
 import {
   SidebarInset,
   SidebarProvider,
@@ -24,7 +24,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
       <AppSidebar session={session} />
       <SidebarInset>
         <AppNavbar user={session.user} />
-        <div className="flex flex-1 flex-col gap-4 p-4">
+        <div className="flex flex-1 flex-col">
           <Suspense fallback={<DashboardSkeleton />}>
             {children}
           </Suspense>

@@ -1,21 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSessionCookie } from "better-auth";
+import { getSessionCookie } from "better-auth/cookies";
+
+const protectedRoutes = ["/dashboard", "/dashboard/:path*"];
+const publicRoutes = ["/", "/login"];
 
 export async function middleware(request: NextRequest) {
   try {
     const pathname = request.nextUrl.pathname;
     const sessionCookie = getSessionCookie(request);
 
-    // Redirect unauthenticated users away from dashboard
-    if (
-      !sessionCookie &&
-      (pathname.startsWith("/dashboard") || pathname.startsWith("/dashboard/"))
-    ) {
+    const isProtectedRoute = protectedRoutes.includes(pathname);
+    const isPublicRoute = publicRoutes.includes(pathname);
+
+    // Redirect unauthenticated users away from protected routes
+    if (!sessionCookie && isProtectedRoute) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
 
-    // Redirect authenticated users away from login/root only if they're specifically on those paths
-    if (sessionCookie && (pathname === "/" || pathname === "/login")) {
+    // Redirect authenticated users away public routes
+    if (sessionCookie && isPublicRoute) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
 
@@ -26,5 +29,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/login", "/dashboard", "/dashboard/:path*"],
+  matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
 };

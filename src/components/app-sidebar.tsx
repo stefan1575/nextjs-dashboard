@@ -31,7 +31,7 @@ const data = {
   planning: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/dashboard",
       icon: LayoutDashboard,
     },
     {
@@ -88,7 +88,6 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        {/* Placeholder Logo */}
         <SidebarLogo />
       </SidebarHeader>
       <SidebarContent>

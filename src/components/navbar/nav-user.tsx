@@ -25,6 +25,7 @@ import { useRouter } from "next/navigation"
 import { authClient } from "@/lib/auth-client"
 import { auth } from "@/lib/auth"
 import { Button } from "../ui/button"
+import Link from "next/link"
 
 type NavUserProps = {
   user: typeof auth.$Infer.Session.user
@@ -37,7 +38,7 @@ export function NavUser({ user }: NavUserProps) {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          router.push("/login"); // redirect to login page
+          router.replace("/login");
         },
       },
     });
@@ -51,9 +52,9 @@ export function NavUser({ user }: NavUserProps) {
           variant="ghost"
           asChild
         >
-          <Avatar className="flex-0 rounded-full hover:border-2 hover:border-sidebar-ring/30 cursor-pointer">
+          <Avatar className="flex-0 select-none rounded-full bg-muted hover:border-2 hover:border-ring/20  cursor-pointer size-8">
             {user.image && <AvatarImage src={user.image} alt={user.name} />}
-            <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
+            <AvatarFallback>{user.name.substring(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -64,9 +65,9 @@ export function NavUser({ user }: NavUserProps) {
       >
         <DropdownMenuLabel className="p-0 font-normal">
           <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-            <Avatar className="h-8 w-8 rounded-lg">
+            <Avatar className="flex-0 select-none rounded-full bg-muted hover:border-2 hover:border-ring/20  cursor-pointer size-8">
               {user.image && <AvatarImage src={user.image} alt={user.name} />}
-              <AvatarFallback className="rounded-lg">{user.name.charAt(0).toUpperCase()}</AvatarFallback>
+              <AvatarFallback>{user.name.substring(0, 2).toUpperCase()}</AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate">{user.name}</span>
@@ -76,13 +77,17 @@ export function NavUser({ user }: NavUserProps) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <User2 />
-            Profile
+          <DropdownMenuItem className="cursor-pointer" asChild>
+            <Link href="/dashboard/profile" >
+              <User2 />
+              Profile
+            </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Shield />
-            Security
+          <DropdownMenuItem className="cursor-pointer" asChild>
+            <Link href="/dashboard/profile/security" >
+              <Shield />
+              Security
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
