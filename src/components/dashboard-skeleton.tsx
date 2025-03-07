@@ -1,4 +1,4 @@
-export default async function DashboardSkeleton() {
+export function DashboardSkeleton() {
   return (
     <>
       <div className="animate-pulse grid auto-rows-min gap-4 md:grid-cols-3">
