@@ -16,7 +16,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   })
 
   if (!session) {
-    throw Error("No Session in Layout.tsx")
+    throw Error("No Session in /dashboard/layout.tsx")
   }
 
   return (
