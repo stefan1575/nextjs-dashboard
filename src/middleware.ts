@@ -1,19 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionCookie } from "better-auth/cookies";
 
-const protectedRoutes = ["/dashboard", "/dashboard/:path*"];
-const publicRoutes = ["/", "/login"];
-
 export async function middleware(request: NextRequest) {
   try {
     const pathname = request.nextUrl.pathname;
     const sessionCookie = getSessionCookie(request);
 
-    const isProtectedRoute = protectedRoutes.includes(pathname);
-    const isPublicRoute = publicRoutes.includes(pathname);
+    const isPublicRoute = ["/", "/login"].includes(pathname);
 
     // Redirect unauthenticated users away from protected routes
-    if (!sessionCookie && isProtectedRoute) {
+    if (!sessionCookie && !isPublicRoute) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
 
@@ -29,5 +25,11 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
+  matcher: [
+    "/((?!api|_next/static|_next/image|.*\\.png$).*)",
+    "/",
+    "/login",
+    "/dashboard",
+    "/dashboard/:path*",
+  ],
 };
