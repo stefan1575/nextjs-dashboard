@@ -68,13 +68,13 @@ export function NavUser({ user }: NavUserProps) {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem className="cursor-pointer" asChild>
-            <Link href="#">
+            <Link href="/dashboard/profile">
               <User2 />
               Profile
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer" asChild>
-            <Link href="#">
+            <Link href="/dashboard/profile/security">
               <Shield />
               Security
             </Link>
