@@ -8,6 +8,13 @@
       "when": 1742082557248,
       "tag": "0000_volatile_millenium_guard",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1742084274618,
+      "tag": "0001_soft_sway",
+      "breakpoints": true
     }
   ]
 }
