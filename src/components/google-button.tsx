@@ -26,12 +26,12 @@ export function GoogleButton({ children }: { children: React.ReactNode }) {
   };
 
   return isLoading ? (
-    <Button type="button" variant="outline" disabled>
+    <Button type="button" variant="outline" className="w-full" disabled>
       <Loader2 className="animate-spin" />
       Loading...
     </Button>
   ) : (
-    <Button onClick={signIn} type="button" variant="outline">
+    <Button onClick={signIn} type="button" className="w-full" variant="outline">
       <GoogleLogo />
       {children}
     </Button>
