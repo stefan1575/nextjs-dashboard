@@ -1,7 +1,7 @@
 import {
   pgTable,
   text,
-  integer,
+  // integer,
   timestamp,
   boolean,
 } from "drizzle-orm/pg-core";
