@@ -26,10 +26,4 @@ export const auth = betterAuth({
       redirectURI: process.env.BETTER_AUTH_URL + "/api/auth/callback/google",
     },
   },
-  session: {
-    cookieCache: {
-      enabled: true,
-      maxAge: 5 * 60, // Cache duration in seconds
-    },
-  },
 });

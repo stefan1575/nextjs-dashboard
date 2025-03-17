@@ -49,9 +49,7 @@ export function DeleteAccountForm() {
 
   const onSubmit: SubmitHandler<DeletePasswordFormFields> = async (values) => {
     await authClient.deleteUser(
-      {
-        password: values.password,
-      },
+      { password: values.password },
       {
         onSuccess: () => {
           router.push("/login");
@@ -70,10 +68,10 @@ export function DeleteAccountForm() {
 
   return (
     <div className="max-w-7xl">
-      <div className="p-4 sm:p-8 bg-inherit space-y-2 sm:rounded-lg border">
+      <div className="space-y-2 border bg-inherit p-4 sm:rounded-lg sm:p-8">
         <div className="space-y-0.5 pb-2">
-          <div className="font-[520]">Delete Account</div>
-          <p className="text-[0.8rem] text-muted-foreground">
+          <div className="text-lg font-semibold">Delete Account</div>
+          <p className="text-muted-foreground text-[0.8rem]">
             {
               "Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain."
             }
@@ -83,18 +81,20 @@ export function DeleteAccountForm() {
           <AlertDialogTrigger asChild>
             {isSubmitting ? (
               <Button
-                className="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150"
+                className="cursor-pointer text-xs font-semibold tracking-widest"
+                variant="destructive"
                 type="button"
                 disabled
               >
-                <Loader2 className="animate-spin" /> Delete Account
+                <Loader2 className="animate-spin" /> Loading...
               </Button>
             ) : (
               <Button
-                className="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150"
+                className="cursor-pointer text-xs font-semibold tracking-widest"
+                variant="destructive"
                 type="button"
               >
-                Delete Account
+                DELETE ACCOUNT
               </Button>
             )}
           </AlertDialogTrigger>
@@ -107,13 +107,13 @@ export function DeleteAccountForm() {
               </AlertDialogDescription>
               <form
                 id="delete-account-form"
-                className="py-2 space-y-2"
+                className="space-y-2 py-2"
                 onSubmit={handleSubmit(onSubmit)}
               >
                 <div className="flex items-center">
                   <Label htmlFor="password">Current Password</Label>
                 </div>
-                <div className="flex items-center relative">
+                <div className="relative flex items-center">
                   <Input
                     {...register("password")}
                     id="password"
@@ -125,7 +125,7 @@ export function DeleteAccountForm() {
                     variant="ghost"
                     size="icon"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute bottom-1 right-1 h-7 w-7"
+                    className="absolute right-1 bottom-1 h-7 w-7"
                   >
                     {showPassword ? (
                       <EyeOff className="stroke-gray-500" />
@@ -150,7 +150,7 @@ export function DeleteAccountForm() {
           </AlertDialogContent>
         </AlertDialog>
         {errors.root?.message && (
-          <p className="text-red-400 text-sm">⚠ {errors.root.message}</p>
+          <p className="text-sm text-red-400">⚠ {errors.root.message}</p>
         )}
       </div>
     </div>

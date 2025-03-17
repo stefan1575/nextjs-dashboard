@@ -22,7 +22,7 @@ export function ProfileSidebar({
   return (
     <nav
       className={cn(
-        "flex lg:flex-col lg:space-x-0 space-x-2 lg:space-y-2",
+        "flex space-x-2 lg:flex-col lg:space-y-2 lg:space-x-0",
         className,
       )}
       {...props}

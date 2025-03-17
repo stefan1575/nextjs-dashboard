@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import { Loader2 } from "lucide-react";
+import { useState } from "react";
 
 export function GoogleButton({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -26,12 +26,22 @@ export function GoogleButton({ children }: { children: React.ReactNode }) {
   };
 
   return isLoading ? (
-    <Button type="button" variant="outline" className="w-full" disabled>
+    <Button
+      type="button"
+      variant="outline"
+      className="w-full cursor-pointer"
+      disabled
+    >
       <Loader2 className="animate-spin" />
       Loading...
     </Button>
   ) : (
-    <Button onClick={signIn} type="button" className="w-full" variant="outline">
+    <Button
+      onClick={signIn}
+      type="button"
+      className="w-full cursor-pointer"
+      variant="outline"
+    >
       <GoogleLogo />
       {children}
     </Button>

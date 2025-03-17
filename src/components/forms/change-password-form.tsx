@@ -67,10 +67,10 @@ export function ChangePasswordForm() {
 
   return (
     <div className="max-w-7xl">
-      <div className="p-8 bg-inherit space-y-4 rounded-lg border">
+      <div className="space-y-4 rounded-lg border bg-inherit p-8">
         <div className="space-y-0.5">
           <div className="text-lg font-semibold">Update Password</div>
-          <p className="text-[0.8rem] text-muted-foreground">
+          <p className="text-muted-foreground text-[0.8rem]">
             {
               "Ensure your account is using a long, random password to stay secure."
             }
@@ -81,7 +81,7 @@ export function ChangePasswordForm() {
             <div className="flex items-center">
               <Label htmlFor="password">Current Password</Label>
             </div>
-            <div className="flex items-center relative">
+            <div className="relative flex items-center">
               <Input
                 {...register("oldPassword")}
                 id="oldPassword"
@@ -95,14 +95,14 @@ export function ChangePasswordForm() {
                 variant="ghost"
                 size="icon"
                 onClick={() => setShowOldPassword(!showOldPassword)}
-                className="absolute bottom-1 right-1 h-7 w-7"
+                className="absolute right-1 bottom-1 h-7 w-7 cursor-pointer"
               >
                 {showOldPassword ? <EyeOff /> : <Eye />}
                 <span className="sr-only">Toggle password visibility</span>
               </Button>
             </div>
             {errors.oldPassword?.message && (
-              <p className="text-red-400 text-sm">
+              <p className="text-sm text-red-400">
                 ⚠ {errors.oldPassword.message}
               </p>
             )}
@@ -111,7 +111,7 @@ export function ChangePasswordForm() {
             <div className="flex items-center">
               <Label htmlFor="password">New Password</Label>
             </div>
-            <div className="flex items-center relative">
+            <div className="relative flex items-center">
               <Input
                 {...register("newPassword")}
                 id="newPassword"
@@ -125,31 +125,35 @@ export function ChangePasswordForm() {
                 variant="ghost"
                 size="icon"
                 onClick={() => setShowNewPassword(!showNewPassword)}
-                className="absolute bottom-1 right-1 h-7 w-7"
+                className="absolute right-1 bottom-1 h-7 w-7 cursor-pointer"
               >
                 {showNewPassword ? <EyeOff /> : <Eye />}
                 <span className="sr-only">Toggle password visibility</span>
               </Button>
             </div>
             {errors.newPassword?.message && (
-              <p className="text-red-400 text-sm">
+              <p className="text-sm text-red-400">
                 ⚠ {errors.newPassword.message}
               </p>
             )}
             {errors.root?.message && (
-              <p className="text-red-400 text-sm">⚠ {errors.root.message}</p>
+              <p className="text-sm text-red-400">⚠ {errors.root.message}</p>
             )}
             {message !== "" && (
-              <p className="text-green-400 text-sm">{message}</p>
+              <p className="text-sm text-green-400">{message}</p>
             )}
           </div>
           {isSubmitting ? (
-            <Button type="submit" disabled>
+            <Button className="cursor-pointer" type="submit" disabled>
               <Loader2 className="animate-spin" />
               Loading...
             </Button>
           ) : (
-            <Button type="submit" disabled={isSubmitting}>
+            <Button
+              className="cursor-pointer"
+              type="submit"
+              disabled={isSubmitting}
+            >
               Submit
             </Button>
           )}
