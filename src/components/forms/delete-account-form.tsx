@@ -68,8 +68,8 @@ export function DeleteAccountForm() {
 
   return (
     <div className="max-w-7xl">
-      <div className="space-y-2 border bg-inherit p-4 sm:rounded-lg sm:p-8">
-        <div className="space-y-0.5 pb-2">
+      <div className="space-y-4 rounded-lg border bg-inherit p-8">
+        <div className="space-y-0.5">
           <div className="text-lg font-semibold">Delete Account</div>
           <p className="text-muted-foreground text-[0.8rem]">
             {

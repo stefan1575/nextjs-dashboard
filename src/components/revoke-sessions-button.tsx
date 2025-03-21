@@ -37,7 +37,7 @@ export function RevokeSessionsButton() {
           onClick={onSubmit}
         >
           <Unplug />
-          Revoke other sessions
+          Revoke Sessions
         </Button>
       )}
     </>

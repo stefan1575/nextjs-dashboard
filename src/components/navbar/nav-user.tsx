@@ -38,7 +38,7 @@ export function NavUser({ user }: NavUserProps) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button size="icon" variant="ghost" asChild>
-          <Avatar className="cursor-pointer rounded-full select-none hover:border-2 size-8">
+          <Avatar className="size-8 cursor-pointer rounded-full select-none hover:border-2">
             {user.image && <AvatarImage src={user.image} alt={user.name} />}
             <AvatarFallback>
               {user.name.substring(0, 2).toUpperCase()}

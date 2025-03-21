@@ -11,11 +11,11 @@ export default async function Page() {
 
   return (
     <div className="max-w-7xl space-y-6">
-      <div className="space-y-4 border bg-inherit p-4 sm:rounded-lg sm:p-8">
+      <div className="space-y-4 rounded-lg border bg-inherit p-8">
         <div className="flex items-center justify-between">
           <div className="space-y-0.5 pb-2">
             <div className="text-lg font-semibold">Sessions</div>
-            <p className="text-muted-foreground text-[0.8rem]">
+            <p className="text-muted-foreground text-[0.8rem] sm:hidden">
               {"Manage your active sessions and revoke access."}
             </p>
           </div>

@@ -6,7 +6,7 @@ export function NavNotification() {
     <Button
       variant="ghost"
       size="icon"
-      className="rounded-full bg-muted dark:hover:bg-muted hover:border-2 cursor-pointer size-8"
+      className="bg-muted dark:hover:bg-muted size-8 cursor-pointer rounded-full hover:border-2"
     >
       <Bell />
     </Button>

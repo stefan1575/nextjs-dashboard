@@ -1,7 +1,3 @@
 {
-  "plugins": [
-    "@trivago/prettier-plugin-sort-imports",
-    "prettier-plugin-tailwindcss"
-  ],
-  "spaces": 2
+  "plugins": ["prettier-plugin-tailwindcss"]
 }
