@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -36,15 +37,19 @@ export function ChangeEmailForm() {
   });
 
   const router = useRouter();
-
-  const { mutate, isPending, isSuccess } = useMutation({
+  const [message, setMessage] = useState("");
+  const { mutate, isPending } = useMutation({
     mutationFn: async (values: ChangeEmailFormFields) =>
       await authClient.changeEmail(
         {
           newEmail: values.email,
         },
         {
+          onRequest: () => {
+            setMessage("");
+          },
           onSuccess: () => {
+            setMessage("Email changed successfully");
             router.refresh(); // re-render the nav-user component
           },
           onError: (ctx) => {
@@ -79,10 +84,8 @@ export function ChangeEmailForm() {
             {errors.email?.message && (
               <p className="text-sm text-red-400">⚠ {errors.email.message}</p>
             )}
-            {isSuccess && (
-              <p className="text-sm text-green-400">
-                Email changed successfully
-              </p>
+            {message !== "" && (
+              <p className="text-sm text-green-400">{message}</p>
             )}
           </div>
           {isPending ? (

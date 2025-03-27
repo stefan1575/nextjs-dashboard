@@ -36,11 +36,12 @@ export function ChangePasswordForm() {
     reValidateMode: "onChange",
   });
 
+  const [message, setMessage] = useState("");
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [oldPassword, newPassword] = watch(["oldPassword", "newPassword"]);
 
-  const { mutate, isPending, isSuccess } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async (values: ChangePasswordFormFields) =>
       await authClient.changePassword(
         {
@@ -49,6 +50,12 @@ export function ChangePasswordForm() {
           revokeOtherSessions: true,
         },
         {
+          onRequest: () => {
+            setMessage("");
+          },
+          onSuccess: () => {
+            setMessage("Password changed successfully");
+          },
           onError: (ctx) => {
             setError("root", {
               type: "custom",
@@ -139,10 +146,8 @@ export function ChangePasswordForm() {
             {errors.root?.message && (
               <p className="text-sm text-red-400">⚠ {errors.root.message}</p>
             )}
-            {isSuccess && (
-              <p className="text-sm text-green-400">
-                Password changed successfully
-              </p>
+            {message !== "" && (
+              <p className="text-sm text-green-400">{message}</p>
             )}
           </div>
           {isPending ? (
