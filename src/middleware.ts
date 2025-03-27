@@ -1,4 +1,4 @@
-import type { auth } from "@/lib/auth";
+import type { auth } from "@/shared/lib/auth";
 import { betterFetch } from "@better-fetch/fetch";
 import { NextRequest, NextResponse } from "next/server";
 

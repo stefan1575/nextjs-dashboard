@@ -1,5 +1,5 @@
-import { ProfileSidebar } from "@/components/profile/profile-sidebar";
-import { Separator } from "@/components/ui/separator";
+import { ProfileSidebar } from "@/features/profile/components/profile-sidebar";
+import { Separator } from "@/shared/components/ui/separator";
 
 const profileSidebarItems = [
   {

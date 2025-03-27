@@ -1,6 +1,6 @@
-import { ProfileSession } from "@/components/profile/profile-sessions";
-import { RevokeSessionsButton } from "@/components/revoke-sessions-button";
-import { auth } from "@/lib/auth";
+import { ProfileSession } from "@/features/security/components/profile-sessions";
+import { RevokeSessionsButton } from "@/features/security/components/revoke-sessions-button";
+import { auth } from "@/shared/lib/auth";
 import { headers } from "next/headers";
 
 export default async function Page() {

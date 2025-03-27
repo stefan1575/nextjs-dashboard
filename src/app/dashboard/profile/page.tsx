@@ -1,7 +1,7 @@
-import { ChangeEmailForm } from "@/components/forms/change-email-form";
-import { ChangePasswordForm } from "@/components/forms/change-password-form";
-import { DeleteAccountForm } from "@/components/forms/delete-account-form";
-import { auth } from "@/lib/auth";
+import { ChangeEmailForm } from "@/features/profile/components/change-email-form";
+import { ChangePasswordForm } from "@/features/profile/components/change-password-form";
+import { DeleteAccountForm } from "@/features/profile/components/delete-account-form";
+import { auth } from "@/shared/lib/auth";
 import { headers } from "next/headers";
 
 export default async function Page() {
