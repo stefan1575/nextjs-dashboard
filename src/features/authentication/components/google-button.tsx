@@ -2,30 +2,23 @@
 
 import { Button } from "@/shared/components/ui/button";
 import { authClient } from "@/shared/lib/auth-client";
+import { useMutation } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
-import { useState } from "react";
 
 export function GoogleButton({ children }: { children: React.ReactNode }) {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const signIn = async () => {
-    await authClient.signIn.social(
-      {
+  const { mutate, isPending } = useMutation({
+    mutationFn: async () =>
+      await authClient.signIn.social({
         provider: "google",
         callbackURL: "/dashboard",
-      },
-      {
-        onRequest: () => {
-          setIsLoading(true);
-        },
-        onSuccess: () => {
-          setIsLoading(false);
-        },
-      },
-    );
+      }),
+  });
+
+  const handleSignIn = () => {
+    mutate();
   };
 
-  return isLoading ? (
+  return isPending ? (
     <Button
       type="button"
       variant="outline"
@@ -37,10 +30,11 @@ export function GoogleButton({ children }: { children: React.ReactNode }) {
     </Button>
   ) : (
     <Button
-      onClick={signIn}
+      onClick={handleSignIn}
       type="button"
       className="w-full cursor-pointer"
       variant="outline"
+      disabled={isPending}
     >
       <GoogleLogo />
       {children}

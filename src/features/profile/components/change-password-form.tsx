@@ -1,11 +1,12 @@
 "use client";
 
+import { password } from "@/features/authentication/schema";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { authClient } from "@/shared/lib/auth-client";
-import { password } from "@/shared/lib/auth-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -23,7 +24,7 @@ export function ChangePasswordForm() {
     register,
     handleSubmit,
     setError,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     watch,
   } = useForm({
     defaultValues: {
@@ -38,31 +39,26 @@ export function ChangePasswordForm() {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [oldPassword, newPassword] = watch(["oldPassword", "newPassword"]);
-  const [message, setMessage] = useState("");
 
-  const onSubmit: SubmitHandler<ChangePasswordFormFields> = async (values) => {
-    setMessage("");
-
-    await authClient.changePassword(
-      {
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: async (values: ChangePasswordFormFields) => {
+      return authClient.changePassword({
         newPassword: values.newPassword,
         currentPassword: values.oldPassword,
-        revokeOtherSessions: true, // revoke all other sessions the user is signed into
-      },
-      {
-        onSuccess: () => {
-          setMessage("Password changed successfully");
-        },
-        onError: (ctx) => {
-          setError("root", {
-            type: "custom",
-            message:
-              ctx.error.message ??
-              "Something went wrong, please try again later",
-          });
-        },
-      },
-    );
+        revokeOtherSessions: true,
+      });
+    },
+    onError: (error) => {
+      setError("root", {
+        type: "custom",
+        message:
+          error.message ?? "Something went wrong, please try again later",
+      });
+    },
+  });
+
+  const onSubmit: SubmitHandler<ChangePasswordFormFields> = (values) => {
+    mutate(values);
   };
 
   return (
@@ -139,11 +135,13 @@ export function ChangePasswordForm() {
             {errors.root?.message && (
               <p className="text-sm text-red-400">⚠ {errors.root.message}</p>
             )}
-            {message !== "" && (
-              <p className="text-sm text-green-400">{message}</p>
+            {isSuccess && (
+              <p className="text-sm text-green-400">
+                Password changed successfully
+              </p>
             )}
           </div>
-          {isSubmitting ? (
+          {isPending ? (
             <Button className="cursor-pointer" type="submit" disabled>
               <Loader2 className="animate-spin" />
               Loading...
@@ -152,7 +150,7 @@ export function ChangePasswordForm() {
             <Button
               className="cursor-pointer"
               type="submit"
-              disabled={isSubmitting}
+              disabled={isPending}
             >
               Submit
             </Button>

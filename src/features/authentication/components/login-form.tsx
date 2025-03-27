@@ -1,6 +1,7 @@
 "use client";
 
 import { GoogleButton } from "@/features/authentication/components/google-button";
+import { LoginSchema } from "@/features/authentication/schema";
 import { Button } from "@/shared/components/ui/button";
 import {
   Card,
@@ -12,9 +13,9 @@ import {
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { authClient } from "@/shared/lib/auth-client";
-import { LoginSchema } from "@/shared/lib/auth-schema";
 import { cn } from "@/shared/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -32,7 +33,7 @@ export function LoginForm({
     register,
     handleSubmit,
     setError,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
     defaultValues: {
       email: "",
@@ -45,21 +46,26 @@ export function LoginForm({
 
   const router = useRouter();
 
-  const onSubmit: SubmitHandler<FormFields> = async (values) => {
-    await authClient.signIn.email(
-      {
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (values: FormFields) => {
+      return authClient.signIn.email({
         email: values.email,
         password: values.password,
-      },
-      {
-        onSuccess: () => {
-          router.replace("/dashboard");
-        },
-        onError: (ctx) => {
-          setError("password", { type: "custom", message: ctx.error.message });
-        },
-      },
-    );
+      });
+    },
+    onSuccess: () => {
+      router.replace("/dashboard");
+    },
+    onError: (error) => {
+      setError("password", {
+        type: "custom",
+        message: error.message || "Login failed",
+      });
+    },
+  });
+
+  const onSubmit: SubmitHandler<FormFields> = (values) => {
+    mutate(values);
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -130,7 +136,7 @@ export function LoginForm({
                     </p>
                   )}
                 </div>
-                {isSubmitting ? (
+                {isPending ? (
                   <Button
                     type="submit"
                     className="w-full cursor-pointer"
@@ -143,7 +149,7 @@ export function LoginForm({
                   <Button
                     type="submit"
                     className="w-full cursor-pointer"
-                    disabled={isSubmitting}
+                    disabled={isPending}
                   >
                     Login
                   </Button>

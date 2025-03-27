@@ -2,26 +2,25 @@
 
 import { Button } from "@/shared/components/ui/button";
 import { authClient } from "@/shared/lib/auth-client";
+import { useMutation } from "@tanstack/react-query";
 import { Loader2, Unplug } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 export function RevokeSessionsButton() {
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  async function onSubmit() {
-    setIsLoading(true);
+  const { mutate, isPending } = useMutation({
+    mutationFn: async () => await authClient.revokeOtherSessions(),
+    onSuccess: () => router.refresh(),
+  });
 
-    await authClient.revokeOtherSessions();
-
-    setIsLoading(false);
-    router.refresh();
-  }
+  const handleRevokeOtherSessions = () => {
+    mutate();
+  };
 
   return (
     <>
-      {isLoading ? (
+      {isPending ? (
         <Button
           className="cursor-pointer font-semibold"
           variant="destructive"
@@ -34,7 +33,8 @@ export function RevokeSessionsButton() {
         <Button
           className="cursor-pointer font-semibold"
           variant="destructive"
-          onClick={onSubmit}
+          onClick={handleRevokeOtherSessions}
+          disabled={isPending}
         >
           <Unplug />
           Revoke Sessions

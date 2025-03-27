@@ -17,6 +17,7 @@ import {
 } from "@/shared/components/ui/dropdown-menu";
 import { auth } from "@/shared/lib/auth";
 import { authClient } from "@/shared/lib/auth-client";
+import { useMutation } from "@tanstack/react-query";
 import { LogOut, Shield, User2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -28,14 +29,19 @@ type NavUserProps = {
 export function NavUser({ user }: NavUserProps) {
   const router = useRouter();
 
-  const logout = async () => {
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          router.replace("/login");
+  const { mutate } = useMutation({
+    mutationFn: async () =>
+      await authClient.signOut({
+        fetchOptions: {
+          onSuccess: () => {
+            router.replace("/login");
+          },
         },
-      },
-    });
+      }),
+  });
+
+  const handleLogOut = async () => {
+    mutate();
   };
 
   return (
@@ -85,7 +91,7 @@ export function NavUser({ user }: NavUserProps) {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer" onClick={() => logout()}>
+        <DropdownMenuItem className="cursor-pointer" onClick={handleLogOut}>
           <LogOut />
           Logout
         </DropdownMenuItem>

@@ -3,9 +3,9 @@
 import { Button } from "@/shared/components/ui/button";
 import { auth } from "@/shared/lib/auth";
 import { authClient } from "@/shared/lib/auth-client";
+import { useMutation } from "@tanstack/react-query";
 import { Laptop, Loader2, TabletSmartphone } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { UAParser } from "ua-parser-js";
 
 type ProfileSessionProps = {
@@ -13,22 +13,24 @@ type ProfileSessionProps = {
   currentSession: typeof auth.$Infer.Session.session;
 };
 
+type token = typeof auth.$Infer.Session.session.token;
+
 export function ProfileSession({
   sessions,
   currentSession,
 }: ProfileSessionProps) {
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  async function onSubmit(token: typeof auth.$Infer.Session.session.token) {
-    setIsLoading(true);
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (token: token) =>
+      await authClient.revokeSession({ token }),
+    onSuccess: () => router.refresh(),
+  });
 
-    await authClient.revokeSession({ token });
+  const handleRevokeOtherSessions = async (token: token) => {
+    mutate(token);
+  };
 
-    setIsLoading(false);
-
-    router.refresh();
-  }
   return (
     <>
       {sessions!.map((session) => {
@@ -60,7 +62,7 @@ export function ProfileSession({
               </Button>
             ) : (
               <>
-                {isLoading ? (
+                {isPending ? (
                   <Button
                     className="cursor-pointer"
                     variant="outline"
@@ -73,11 +75,12 @@ export function ProfileSession({
                 ) : (
                   <Button
                     onClick={() => {
-                      onSubmit(session.token);
+                      handleRevokeOtherSessions(session.token);
                     }}
                     className="cursor-pointer"
                     variant="outline"
                     type="button"
+                    disabled={isPending}
                   >
                     Revoke
                   </Button>

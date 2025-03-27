@@ -1,15 +1,15 @@
 "use client";
 
+import { email } from "@/features/authentication/schema";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { auth } from "@/shared/lib/auth";
 import { authClient } from "@/shared/lib/auth-client";
-import { email } from "@/shared/lib/auth-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -28,7 +28,7 @@ export function ChangeEmailForm({ user }: ChangeEmailFormProps) {
     register,
     handleSubmit,
     setError,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
     defaultValues: {
       email: user.email,
@@ -40,30 +40,31 @@ export function ChangeEmailForm({ user }: ChangeEmailFormProps) {
 
   const router = useRouter();
 
-  const [message, setMessage] = useState("");
-
-  const onSubmit: SubmitHandler<ChangeEmailFormFields> = async (values) => {
-    setMessage("");
-
-    await authClient.changeEmail(
-      {
-        newEmail: values.email,
-      },
-      {
-        onSuccess: () => {
-          setMessage("Email changed successfully");
-          router.refresh();
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: async (values: ChangeEmailFormFields) => {
+      return await authClient.changeEmail(
+        {
+          newEmail: values.email,
         },
-        onError: (ctx) => {
-          setError("email", {
-            type: "custom",
-            message:
-              ctx.error.message ??
-              "Something went wrong, please try again later",
-          });
+        {
+          onSuccess: () => {
+            router.refresh(); // re-render the nav-user component
+          },
+          onError: (ctx) => {
+            setError("email", {
+              type: "custom",
+              message:
+                ctx.error.message ??
+                "Something went wrong, please try again later",
+            });
+          },
         },
-      },
-    );
+      );
+    },
+  });
+
+  const onSubmit: SubmitHandler<ChangeEmailFormFields> = (values) => {
+    mutate(values);
   };
 
   return (
@@ -82,11 +83,13 @@ export function ChangeEmailForm({ user }: ChangeEmailFormProps) {
             {errors.email?.message && (
               <p className="text-sm text-red-400">⚠ {errors.email.message}</p>
             )}
-            {message !== "" && (
-              <p className="text-sm text-green-400">⚠ {message}</p>
+            {isSuccess && (
+              <p className="text-sm text-green-400">
+                Email changed successfully
+              </p>
             )}
           </div>
-          {isSubmitting ? (
+          {isPending ? (
             <Button type="submit" className="cursor-pointer" disabled>
               <Loader2 className="animate-spin" />
               Loading...
@@ -95,7 +98,7 @@ export function ChangeEmailForm({ user }: ChangeEmailFormProps) {
             <Button
               type="submit"
               className="cursor-pointer"
-              disabled={isSubmitting}
+              disabled={isPending}
             >
               Submit
             </Button>

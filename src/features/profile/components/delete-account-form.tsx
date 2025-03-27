@@ -16,6 +16,7 @@ import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { authClient } from "@/shared/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -33,7 +34,7 @@ export function DeleteAccountForm() {
     register,
     handleSubmit,
     setError,
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, isValid },
   } = useForm({
     defaultValues: {
       password: "",
@@ -43,27 +44,30 @@ export function DeleteAccountForm() {
     reValidateMode: "onChange",
   });
 
-  const router = useRouter();
-
   const [showPassword, setShowPassword] = useState(false);
 
-  const onSubmit: SubmitHandler<DeletePasswordFormFields> = async (values) => {
-    await authClient.deleteUser(
-      { password: values.password },
-      {
-        onSuccess: () => {
-          router.push("/login");
-        },
-        onError: (ctx) => {
-          setError("root", {
-            type: "custom",
-            message:
-              ctx.error.message ??
-              "Something went wrong, please try again later",
-          });
-        },
-      },
-    );
+  const router = useRouter();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (values: DeletePasswordFormFields) => {
+      return authClient.deleteUser({
+        password: values.password,
+      });
+    },
+    onSuccess: () => {
+      router.push("/login");
+    },
+    onError: (error) => {
+      setError("root", {
+        type: "custom",
+        message:
+          error.message ?? "Something went wrong, please try again later",
+      });
+    },
+  });
+
+  const onSubmit: SubmitHandler<DeletePasswordFormFields> = (values) => {
+    mutate(values);
   };
 
   return (
@@ -79,7 +83,7 @@ export function DeleteAccountForm() {
         </div>
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            {isSubmitting ? (
+            {isPending ? (
               <Button
                 className="cursor-pointer text-xs font-semibold tracking-widest"
                 variant="destructive"

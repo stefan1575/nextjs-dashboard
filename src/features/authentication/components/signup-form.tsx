@@ -1,13 +1,14 @@
 "use client";
 
 import { GoogleButton } from "@/features/authentication/components/google-button";
+import { SignUpSchema } from "@/features/authentication/schema";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { authClient } from "@/shared/lib/auth-client";
-import { SignUpSchema } from "@/shared/lib/auth-schema";
 import { cn } from "@/shared/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -25,7 +26,7 @@ export function SignupForm({
     register,
     handleSubmit,
     setError,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
     defaultValues: {
       email: "",
@@ -38,22 +39,28 @@ export function SignupForm({
 
   const router = useRouter();
 
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (values: FormFields) => {
+      return authClient.signUp.email(
+        {
+          email: values.email,
+          name: values.email,
+          password: values.password,
+        },
+        {
+          onSuccess: () => {
+            router.replace("/dashboard");
+          },
+          onError: (ctx) => {
+            setError("email", { type: "custom", message: ctx.error.message });
+          },
+        },
+      );
+    },
+  });
+
   const onSubmit: SubmitHandler<FormFields> = async (values) => {
-    await authClient.signUp.email(
-      {
-        email: values.email,
-        name: values.email,
-        password: values.password,
-      },
-      {
-        onSuccess: () => {
-          router.replace("/dashboard");
-        },
-        onError: (ctx) => {
-          setError("email", { type: "custom", message: ctx.error.message });
-        },
-      },
-    );
+    mutate(values);
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -120,7 +127,7 @@ export function SignupForm({
             <p className="text-sm text-red-400">⚠ {errors.password.message}</p>
           )}
         </div>
-        {isSubmitting ? (
+        {isPending ? (
           <Button type="submit" className="w-full cursor-pointer" disabled>
             <Loader2 className="animate-spin" />
             Loading...
@@ -129,7 +136,7 @@ export function SignupForm({
           <Button
             type="submit"
             className="w-full cursor-pointer"
-            disabled={isSubmitting}
+            disabled={isPending}
           >
             Create an account
           </Button>

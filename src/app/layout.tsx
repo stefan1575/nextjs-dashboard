@@ -1,4 +1,5 @@
 import "./globals.css";
+import ContextProvider from "@/features/dashboard/components/context-provider";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
@@ -27,7 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} dark antialiased`}
       >
-        {children}
+        <ContextProvider>{children}</ContextProvider>
       </body>
     </html>
   );
