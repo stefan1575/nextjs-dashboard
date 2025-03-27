@@ -12,7 +12,7 @@ export default async function Page() {
         <div className="flex items-center justify-between">
           <div className="space-y-0.5 pb-2">
             <div className="text-lg font-semibold">Sessions</div>
-            <p className="text-muted-foreground text-[0.8rem] sm:hidden">
+            <p className="text-muted-foreground text-[0.8rem]">
               {"Manage your active sessions and revoke access."}
             </p>
           </div>

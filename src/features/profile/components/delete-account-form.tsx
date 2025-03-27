@@ -89,7 +89,7 @@ export function DeleteAccountForm() {
           <AlertDialogTrigger asChild>
             {isPending ? (
               <Button
-                className="cursor-pointer text-xs font-semibold tracking-widest"
+                className="text-xs font-semibold tracking-widest"
                 variant="destructive"
                 type="button"
                 disabled
@@ -98,7 +98,7 @@ export function DeleteAccountForm() {
               </Button>
             ) : (
               <Button
-                className="cursor-pointer text-xs font-semibold tracking-widest"
+                className="text-xs font-semibold tracking-widest"
                 variant="destructive"
                 type="button"
               >

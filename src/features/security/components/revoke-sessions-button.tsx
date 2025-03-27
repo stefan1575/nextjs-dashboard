@@ -24,17 +24,13 @@ export function RevokeSessionsButton() {
   return (
     <>
       {isPending ? (
-        <Button
-          className="cursor-pointer font-semibold"
-          variant="destructive"
-          disabled
-        >
+        <Button className="font-semibold" variant="destructive" disabled>
           <Loader2 className="animate-spin" />
           Loading...
         </Button>
       ) : (
         <Button
-          className="cursor-pointer font-semibold"
+          className="font-semibold"
           variant="destructive"
           onClick={handleRevokeOtherSessions}
           disabled={isPending}

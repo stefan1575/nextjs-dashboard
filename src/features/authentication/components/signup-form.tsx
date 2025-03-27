@@ -112,7 +112,7 @@ export function SignupForm({
               variant="ghost"
               size="icon"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-1 bottom-1 h-7 w-7 cursor-pointer"
+              className="absolute right-1 bottom-1 h-7 w-7"
             >
               {showPassword ? (
                 <EyeOff className="stroke-gray-500" />
@@ -127,16 +127,12 @@ export function SignupForm({
           )}
         </div>
         {isPending ? (
-          <Button type="submit" className="w-full cursor-pointer" disabled>
+          <Button type="submit" className="w-full" disabled>
             <Loader2 className="animate-spin" />
             Loading...
           </Button>
         ) : (
-          <Button
-            type="submit"
-            className="w-full cursor-pointer"
-            disabled={isPending}
-          >
+          <Button type="submit" className="w-full" disabled={isPending}>
             Create an account
           </Button>
         )}

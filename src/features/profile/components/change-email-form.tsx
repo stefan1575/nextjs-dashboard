@@ -86,16 +86,12 @@ export function ChangeEmailForm() {
             )}
           </div>
           {isPending ? (
-            <Button type="submit" className="cursor-pointer" disabled>
+            <Button type="submit" disabled>
               <Loader2 className="animate-spin" />
               Loading...
             </Button>
           ) : (
-            <Button
-              type="submit"
-              className="cursor-pointer"
-              disabled={isPending}
-            >
+            <Button type="submit" disabled={isPending}>
               Submit
             </Button>
           )}

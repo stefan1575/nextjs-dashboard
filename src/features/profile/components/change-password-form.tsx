@@ -95,7 +95,7 @@ export function ChangePasswordForm() {
                 variant="ghost"
                 size="icon"
                 onClick={() => setShowOldPassword(!showOldPassword)}
-                className="absolute right-1 bottom-1 h-7 w-7 cursor-pointer"
+                className="absolute right-1 bottom-1 h-7 w-7"
               >
                 {showOldPassword ? <EyeOff /> : <Eye />}
                 <span className="sr-only">Toggle password visibility</span>
@@ -125,7 +125,7 @@ export function ChangePasswordForm() {
                 variant="ghost"
                 size="icon"
                 onClick={() => setShowNewPassword(!showNewPassword)}
-                className="absolute right-1 bottom-1 h-7 w-7 cursor-pointer"
+                className="absolute right-1 bottom-1 h-7 w-7"
               >
                 {showNewPassword ? <EyeOff /> : <Eye />}
                 <span className="sr-only">Toggle password visibility</span>
@@ -146,16 +146,12 @@ export function ChangePasswordForm() {
             )}
           </div>
           {isPending ? (
-            <Button className="cursor-pointer" type="submit" disabled>
+            <Button type="submit" disabled>
               <Loader2 className="animate-spin" />
               Loading...
             </Button>
           ) : (
-            <Button
-              className="cursor-pointer"
-              type="submit"
-              disabled={isPending}
-            >
+            <Button type="submit" disabled={isPending}>
               Submit
             </Button>
           )}

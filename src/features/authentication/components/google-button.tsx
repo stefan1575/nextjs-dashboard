@@ -19,12 +19,7 @@ export function GoogleButton({ children }: { children: React.ReactNode }) {
   };
 
   return isPending ? (
-    <Button
-      type="button"
-      variant="outline"
-      className="w-full cursor-pointer"
-      disabled
-    >
+    <Button type="button" variant="outline" className="w-full" disabled>
       <Loader2 className="animate-spin" />
       Loading...
     </Button>
@@ -32,7 +27,7 @@ export function GoogleButton({ children }: { children: React.ReactNode }) {
     <Button
       onClick={handleSignIn}
       type="button"
-      className="w-full cursor-pointer"
+      className="w-full"
       variant="outline"
       disabled={isPending}
     >

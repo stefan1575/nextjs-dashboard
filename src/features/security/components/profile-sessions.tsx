@@ -66,12 +66,7 @@ export function ProfileSession({ sessions }: ProfileSessionProps) {
             ) : (
               <>
                 {isPending ? (
-                  <Button
-                    className="cursor-pointer"
-                    variant="outline"
-                    type="button"
-                    disabled
-                  >
+                  <Button variant="outline" type="button" disabled>
                     <Loader2 className="animate-spin" />
                     Loading...
                   </Button>
@@ -80,7 +75,6 @@ export function ProfileSession({ sessions }: ProfileSessionProps) {
                     onClick={() => {
                       handleRevokeOtherSessions(session.token);
                     }}
-                    className="cursor-pointer"
                     variant="outline"
                     type="button"
                     disabled={isPending}
