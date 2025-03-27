@@ -4,7 +4,7 @@ import { email } from "@/features/authentication/schema";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
-import { auth } from "@/shared/lib/auth";
+import { useSession } from "@/shared/hooks/use-session";
 import { authClient } from "@/shared/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -19,11 +19,8 @@ const changeEmailFormSchema = z.object({
 
 type ChangeEmailFormFields = z.infer<typeof changeEmailFormSchema>;
 
-type ChangeEmailFormProps = {
-  user: typeof auth.$Infer.Session.user;
-};
-
-export function ChangeEmailForm({ user }: ChangeEmailFormProps) {
+export function ChangeEmailForm() {
+  const { user } = useSession();
   const {
     register,
     handleSubmit,

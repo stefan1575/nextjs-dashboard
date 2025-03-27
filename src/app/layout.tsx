@@ -1,5 +1,5 @@
 import "./globals.css";
-import ContextProvider from "@/features/dashboard/components/context-provider";
+import { QueryProvider } from "@/features/dashboard/components/query-provider";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
@@ -28,7 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} dark antialiased`}
       >
-        <ContextProvider>{children}</ContextProvider>
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );

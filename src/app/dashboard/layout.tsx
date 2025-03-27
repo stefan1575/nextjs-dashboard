@@ -1,8 +1,10 @@
 import { AppNavbar } from "@/features/dashboard/components/app-navbar";
 import { AppSidebar } from "@/features/dashboard/components/app-sidebar";
+import { SessionProvider } from "@/features/dashboard/components/session-provider";
 import { SidebarInset, SidebarProvider } from "@/shared/components/ui/sidebar";
 import { auth } from "@/shared/lib/auth";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 export default async function DashboardLayout({
@@ -15,19 +17,21 @@ export default async function DashboardLayout({
   });
 
   if (!session) {
-    throw Error("No Session in /dashboard/layout.tsx");
+    redirect("/login");
   }
 
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <AppNavbar user={session.user} />
-        <div className="flex flex-1 flex-col gap-4 p-4">
-          <Suspense fallback={<DashboardSkeleton />}>{children}</Suspense>
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
+    <SessionProvider session={session}>
+      <SidebarProvider>
+        <AppSidebar />
+        <SidebarInset>
+          <AppNavbar />
+          <div className="flex flex-1 flex-col gap-4 p-4">
+            <Suspense fallback={<DashboardSkeleton />}>{children}</Suspense>
+          </div>
+        </SidebarInset>
+      </SidebarProvider>
+    </SessionProvider>
   );
 }
 

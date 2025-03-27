@@ -15,19 +15,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/components/ui/dropdown-menu";
-import { auth } from "@/shared/lib/auth";
+import { useSession } from "@/shared/hooks/use-session";
 import { authClient } from "@/shared/lib/auth-client";
 import { useMutation } from "@tanstack/react-query";
 import { LogOut, Shield, User2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-type NavUserProps = {
-  user: typeof auth.$Infer.Session.user;
-};
-
-export function NavUser({ user }: NavUserProps) {
+export function NavUser() {
   const router = useRouter();
+  const { user } = useSession();
 
   const { mutate } = useMutation({
     mutationFn: async () =>

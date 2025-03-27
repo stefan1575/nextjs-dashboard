@@ -4,10 +4,7 @@ import { auth } from "@/shared/lib/auth";
 import { headers } from "next/headers";
 
 export default async function Page() {
-  const requestHeaders = await headers();
-
-  const sessions = await auth.api.listSessions({ headers: requestHeaders });
-  const session = await auth.api.getSession({ headers: requestHeaders });
+  const sessions = await auth.api.listSessions({ headers: await headers() });
 
   return (
     <div className="max-w-7xl space-y-6">
@@ -21,7 +18,7 @@ export default async function Page() {
           </div>
           <RevokeSessionsButton />
         </div>
-        <ProfileSession currentSession={session!.session} sessions={sessions} />
+        <ProfileSession sessions={sessions} />
       </div>
     </div>
   );
