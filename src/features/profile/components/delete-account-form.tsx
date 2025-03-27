@@ -49,21 +49,25 @@ export function DeleteAccountForm() {
   const router = useRouter();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (values: DeletePasswordFormFields) => {
-      return authClient.deleteUser({
-        password: values.password,
-      });
-    },
-    onSuccess: () => {
-      router.push("/login");
-    },
-    onError: (error) => {
-      setError("root", {
-        type: "custom",
-        message:
-          error.message ?? "Something went wrong, please try again later",
-      });
-    },
+    mutationFn: async (values: DeletePasswordFormFields) =>
+      await authClient.deleteUser(
+        {
+          password: values.password,
+        },
+        {
+          onSuccess: () => {
+            router.push("/login");
+          },
+          onError: (ctx) => {
+            setError("root", {
+              type: "custom",
+              message:
+                ctx.error.message ??
+                "Something went wrong, please try again later",
+            });
+          },
+        },
+      ),
   });
 
   const onSubmit: SubmitHandler<DeletePasswordFormFields> = (values) => {

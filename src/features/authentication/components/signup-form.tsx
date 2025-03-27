@@ -40,8 +40,8 @@ export function SignupForm({
   const router = useRouter();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (values: FormFields) => {
-      return authClient.signUp.email(
+    mutationFn: async (values: FormFields) =>
+      authClient.signUp.email(
         {
           email: values.email,
           name: values.email,
@@ -55,8 +55,7 @@ export function SignupForm({
             setError("email", { type: "custom", message: ctx.error.message });
           },
         },
-      );
-    },
+      ),
   });
 
   const onSubmit: SubmitHandler<FormFields> = async (values) => {

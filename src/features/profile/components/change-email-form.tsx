@@ -38,8 +38,8 @@ export function ChangeEmailForm() {
   const router = useRouter();
 
   const { mutate, isPending, isSuccess } = useMutation({
-    mutationFn: async (values: ChangeEmailFormFields) => {
-      return await authClient.changeEmail(
+    mutationFn: async (values: ChangeEmailFormFields) =>
+      await authClient.changeEmail(
         {
           newEmail: values.email,
         },
@@ -56,8 +56,7 @@ export function ChangeEmailForm() {
             });
           },
         },
-      );
-    },
+      ),
   });
 
   const onSubmit: SubmitHandler<ChangeEmailFormFields> = (values) => {

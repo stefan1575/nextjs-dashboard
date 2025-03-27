@@ -48,19 +48,23 @@ export function LoginForm({
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (values: FormFields) => {
-      return authClient.signIn.email({
-        email: values.email,
-        password: values.password,
-      });
-    },
-    onSuccess: () => {
-      router.replace("/dashboard");
-    },
-    onError: (error) => {
-      setError("password", {
-        type: "custom",
-        message: error.message || "Login failed",
-      });
+      return authClient.signIn.email(
+        {
+          email: values.email,
+          password: values.password,
+        },
+        {
+          onSuccess: () => {
+            router.replace("/dashboard");
+          },
+          onError: (ctx) => {
+            setError("password", {
+              type: "custom",
+              message: ctx.error.message,
+            });
+          },
+        },
+      );
     },
   });
 

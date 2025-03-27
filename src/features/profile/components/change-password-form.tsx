@@ -41,20 +41,24 @@ export function ChangePasswordForm() {
   const [oldPassword, newPassword] = watch(["oldPassword", "newPassword"]);
 
   const { mutate, isPending, isSuccess } = useMutation({
-    mutationFn: async (values: ChangePasswordFormFields) => {
-      return authClient.changePassword({
-        newPassword: values.newPassword,
-        currentPassword: values.oldPassword,
-        revokeOtherSessions: true,
-      });
-    },
-    onError: (error) => {
-      setError("root", {
-        type: "custom",
-        message:
-          error.message ?? "Something went wrong, please try again later",
-      });
-    },
+    mutationFn: async (values: ChangePasswordFormFields) =>
+      await authClient.changePassword(
+        {
+          newPassword: values.newPassword,
+          currentPassword: values.oldPassword,
+          revokeOtherSessions: true,
+        },
+        {
+          onError: (ctx) => {
+            setError("root", {
+              type: "custom",
+              message:
+                ctx.error.message ??
+                "Something went wrong, please try again later",
+            });
+          },
+        },
+      ),
   });
 
   const onSubmit: SubmitHandler<ChangePasswordFormFields> = (values) => {
