@@ -28,7 +28,7 @@ export default function ProfileLayout({ children }: ProfileLayoutProps) {
         <aside className="lg:w-1/5">
           <ProfileSidebar items={profileSidebarItems} />
         </aside>
-        <div className="flex-1 lg:max-w-2xl">{children}</div>
+        <div className="flex-0 md:max-w-2xl md:flex-1">{children}</div>
       </div>
     </div>
   );

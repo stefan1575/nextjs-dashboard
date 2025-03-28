@@ -45,10 +45,10 @@ export function ProfileSession({ sessions }: ProfileSessionProps) {
             className="flex items-center justify-between rounded-lg border bg-inherit p-4"
           >
             <div className="flex items-center space-x-2">
-              <div className="rounded-full border p-2">
+              <div className="hidden rounded-full border p-2 md:block">
                 {device.is("mobile") ? <TabletSmartphone /> : <Laptop />}
               </div>
-              <div className="flex-row">
+              <div className="flex-row p-1">
                 <div>{os.name}</div>
                 <div className="text-muted-foreground text-xs">
                   {browser.name}
@@ -57,7 +57,7 @@ export function ProfileSession({ sessions }: ProfileSessionProps) {
             </div>
             {session.token === currentSession.token ? (
               <Button
-                className="text-muted-foreground hover:bg-background hover:text-muted-foreground dark:bg-background hover:dark:bg-background"
+                className="text-muted-foreground hover:bg-background hover:text-muted-foreground dark:bg-background hover:dark:bg-background hidden md:block"
                 variant="outline"
                 type="button"
               >

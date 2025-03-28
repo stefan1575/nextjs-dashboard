@@ -73,95 +73,93 @@ export function ChangePasswordForm() {
   };
 
   return (
-    <div className="max-w-7xl">
-      <div className="space-y-4 rounded-lg border bg-inherit p-8">
-        <div className="space-y-0.5">
-          <div className="text-lg font-semibold">Update Password</div>
-          <p className="text-muted-foreground text-[0.8rem]">
-            {
-              "Ensure your account is using a long, random password to stay secure."
-            }
-          </p>
-        </div>
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-6">
-          <div className="grid gap-2">
-            <div className="flex items-center">
-              <Label htmlFor="password">Current Password</Label>
-            </div>
-            <div className="relative flex items-center">
-              <Input
-                {...register("oldPassword")}
-                id="oldPassword"
-                className=""
-                type={showOldPassword ? "text" : "password"}
-                placeholder="************"
-                required={newPassword !== ""}
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                onClick={() => setShowOldPassword(!showOldPassword)}
-                className="absolute right-1 bottom-1 h-7 w-7"
-              >
-                {showOldPassword ? <EyeOff /> : <Eye />}
-                <span className="sr-only">Toggle password visibility</span>
-              </Button>
-            </div>
-            {errors.oldPassword?.message && (
-              <p className="text-sm text-red-400">
-                ⚠ {errors.oldPassword.message}
-              </p>
-            )}
-          </div>
-          <div className="grid gap-2">
-            <div className="flex items-center">
-              <Label htmlFor="password">New Password</Label>
-            </div>
-            <div className="relative flex items-center">
-              <Input
-                {...register("newPassword")}
-                id="newPassword"
-                className=""
-                type={showNewPassword ? "text" : "password"}
-                placeholder="************"
-                required={oldPassword !== ""}
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                onClick={() => setShowNewPassword(!showNewPassword)}
-                className="absolute right-1 bottom-1 h-7 w-7"
-              >
-                {showNewPassword ? <EyeOff /> : <Eye />}
-                <span className="sr-only">Toggle password visibility</span>
-              </Button>
-            </div>
-            {errors.newPassword?.message && (
-              <p className="text-sm text-red-400">
-                ⚠ {errors.newPassword.message}
-              </p>
-            )}
-            {errors.root?.message && (
-              <p className="text-sm text-red-400">⚠ {errors.root.message}</p>
-            )}
-            {message !== "" && (
-              <p className="text-sm text-green-400">{message}</p>
-            )}
-          </div>
-          {isPending ? (
-            <Button type="submit" disabled>
-              <Loader2 className="animate-spin" />
-              Loading...
-            </Button>
-          ) : (
-            <Button type="submit" disabled={isPending}>
-              Submit
-            </Button>
-          )}
-        </form>
+    <div className="space-y-4 rounded-lg border bg-inherit p-8">
+      <div className="space-y-0.5">
+        <div className="text-lg font-semibold">Update Password</div>
+        <p className="text-muted-foreground hidden text-[0.8rem] md:block">
+          {
+            "Ensure your account is using a long, random password to stay secure."
+          }
+        </p>
       </div>
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-6">
+        <div className="grid gap-2">
+          <div className="flex items-center">
+            <Label htmlFor="password">Current Password</Label>
+          </div>
+          <div className="relative flex items-center">
+            <Input
+              {...register("oldPassword")}
+              id="oldPassword"
+              className=""
+              type={showOldPassword ? "text" : "password"}
+              placeholder="************"
+              required={newPassword !== ""}
+            />
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={() => setShowOldPassword(!showOldPassword)}
+              className="absolute right-1 bottom-1 h-7 w-7"
+            >
+              {showOldPassword ? <EyeOff /> : <Eye />}
+              <span className="sr-only">Toggle password visibility</span>
+            </Button>
+          </div>
+          {errors.oldPassword?.message && (
+            <p className="text-sm text-red-400">
+              ⚠ {errors.oldPassword.message}
+            </p>
+          )}
+        </div>
+        <div className="grid gap-2">
+          <div className="flex items-center">
+            <Label htmlFor="password">New Password</Label>
+          </div>
+          <div className="relative flex items-center">
+            <Input
+              {...register("newPassword")}
+              id="newPassword"
+              className=""
+              type={showNewPassword ? "text" : "password"}
+              placeholder="************"
+              required={oldPassword !== ""}
+            />
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={() => setShowNewPassword(!showNewPassword)}
+              className="absolute right-1 bottom-1 h-7 w-7"
+            >
+              {showNewPassword ? <EyeOff /> : <Eye />}
+              <span className="sr-only">Toggle password visibility</span>
+            </Button>
+          </div>
+          {errors.newPassword?.message && (
+            <p className="text-sm text-red-400">
+              ⚠ {errors.newPassword.message}
+            </p>
+          )}
+          {errors.root?.message && (
+            <p className="text-sm text-red-400">⚠ {errors.root.message}</p>
+          )}
+          {message !== "" && (
+            <p className="text-sm text-green-400">{message}</p>
+          )}
+        </div>
+        {isPending ? (
+          <Button type="submit" disabled>
+            <Loader2 className="animate-spin" />
+            Loading...
+          </Button>
+        ) : (
+          <Button type="submit" disabled={isPending}>
+            Submit
+          </Button>
+        )}
+      </form>
     </div>
   );
 }

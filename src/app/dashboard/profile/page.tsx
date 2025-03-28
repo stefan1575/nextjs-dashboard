@@ -4,7 +4,7 @@ import { DeleteAccountForm } from "@/features/profile/components/delete-account-
 
 export default async function Page() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-0">
       <ChangeEmailForm />
       <ChangePasswordForm />
       <DeleteAccountForm />

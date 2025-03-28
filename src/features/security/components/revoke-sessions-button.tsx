@@ -3,7 +3,7 @@
 import { Button } from "@/shared/components/ui/button";
 import { authClient } from "@/shared/lib/auth-client";
 import { useMutation } from "@tanstack/react-query";
-import { Loader2, Unplug } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export function RevokeSessionsButton() {
@@ -35,8 +35,7 @@ export function RevokeSessionsButton() {
           onClick={handleRevokeOtherSessions}
           disabled={isPending}
         >
-          <Unplug />
-          Revoke Sessions
+          Revoke Other Sessions
         </Button>
       )}
     </>
