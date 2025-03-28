@@ -9,7 +9,6 @@ import { authClient } from "@/shared/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -36,21 +35,22 @@ export function ChangeEmailForm() {
     reValidateMode: "onChange",
   });
 
-  const router = useRouter();
   const [message, setMessage] = useState("");
   const { mutate, isPending } = useMutation({
     mutationFn: async (values: ChangeEmailFormFields) =>
       await authClient.changeEmail(
         {
           newEmail: values.email,
+          callbackURL: "/dashboard/profile",
         },
         {
           onRequest: () => {
             setMessage("");
           },
           onSuccess: () => {
-            setMessage("Email changed successfully");
-            router.refresh(); // re-render the nav-user component
+            setMessage(
+              "A confirmation email has been sent to your new email address. Please check your inbox to confirm the change.",
+            );
           },
           onError: (ctx) => {
             setError("email", {

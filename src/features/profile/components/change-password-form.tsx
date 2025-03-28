@@ -54,7 +54,9 @@ export function ChangePasswordForm() {
             setMessage("");
           },
           onSuccess: () => {
-            setMessage("Password changed successfully");
+            setMessage(
+              "A password reset email has been sent to your inbox. Please follow the instructions to reset your password.",
+            );
           },
           onError: (ctx) => {
             setError("root", {

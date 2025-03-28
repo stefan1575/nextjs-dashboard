@@ -18,7 +18,6 @@ import { authClient } from "@/shared/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -45,8 +44,7 @@ export function DeleteAccountForm() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-
-  const router = useRouter();
+  const [message, setMessage] = useState("");
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (values: DeletePasswordFormFields) =>
@@ -55,8 +53,13 @@ export function DeleteAccountForm() {
           password: values.password,
         },
         {
+          onRequest: () => {
+            setMessage("");
+          },
           onSuccess: () => {
-            router.push("/login");
+            setMessage(
+              "A confirmation email has been sent to proceed with account deletion. Please check your inbox to confirm.",
+            );
           },
           onError: (ctx) => {
             setError("root", {
@@ -161,6 +164,7 @@ export function DeleteAccountForm() {
       {errors.root?.message && (
         <p className="text-sm text-red-400">⚠ {errors.root.message}</p>
       )}
+      {message !== "" && <p className="text-sm text-green-400">{message}</p>}
     </div>
   );
 }

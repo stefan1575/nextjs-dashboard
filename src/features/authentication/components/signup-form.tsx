@@ -43,8 +43,8 @@ export function SignupForm({
     mutationFn: async (values: FormFields) =>
       authClient.signUp.email(
         {
+          name: values.email.split("@")[0],
           email: values.email,
-          name: values.email,
           password: values.password,
         },
         {
