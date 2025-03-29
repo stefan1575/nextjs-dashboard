@@ -9,8 +9,8 @@ import { authClient } from "@/shared/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
-import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const changeEmailFormSchema = z.object({
@@ -24,7 +24,6 @@ export function ChangeEmailForm() {
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -35,7 +34,6 @@ export function ChangeEmailForm() {
     reValidateMode: "onChange",
   });
 
-  const [message, setMessage] = useState("");
   const { mutate, isPending } = useMutation({
     mutationFn: async (values: ChangeEmailFormFields) =>
       await authClient.changeEmail(
@@ -44,18 +42,15 @@ export function ChangeEmailForm() {
           callbackURL: "/dashboard/profile",
         },
         {
-          onRequest: () => {
-            setMessage("");
-          },
           onSuccess: () => {
-            setMessage(
-              "A confirmation email has been sent to your new email address. Please check your inbox to confirm the change.",
-            );
+            toast.success("Email Change Requested", {
+              description:
+                "A confirmation email has been sent to your new address. Please check your inbox to confirm the change.",
+            });
           },
           onError: (ctx) => {
-            setError("email", {
-              type: "custom",
-              message:
+            toast.error("Email Sending Failed", {
+              description:
                 ctx.error.message ??
                 "Something went wrong, please try again later",
             });
@@ -82,9 +77,6 @@ export function ChangeEmailForm() {
           <Input {...register("email")} id="email" type="email" />
           {errors.email?.message && (
             <p className="text-sm text-red-400">⚠ {errors.email.message}</p>
-          )}
-          {message !== "" && (
-            <p className="text-sm text-green-400">{message}</p>
           )}
         </div>
         {isPending ? (

@@ -20,6 +20,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const deleteAccountFormSchema = z.object({
@@ -32,7 +33,6 @@ export function DeleteAccountForm() {
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
@@ -44,7 +44,6 @@ export function DeleteAccountForm() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const [message, setMessage] = useState("");
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (values: DeletePasswordFormFields) =>
@@ -53,18 +52,15 @@ export function DeleteAccountForm() {
           password: values.password,
         },
         {
-          onRequest: () => {
-            setMessage("");
-          },
           onSuccess: () => {
-            setMessage(
-              "A confirmation email has been sent to proceed with account deletion. Please check your inbox to confirm.",
-            );
+            toast.success("Account Deletion Requested", {
+              description:
+                "A confirmation email has been sent. Please check your inbox to proceed with account deletion.",
+            });
           },
           onError: (ctx) => {
-            setError("root", {
-              type: "custom",
-              message:
+            toast.error("Email Sending Failed", {
+              description:
                 ctx.error.message ??
                 "Something went wrong, please try again later",
             });
@@ -164,7 +160,6 @@ export function DeleteAccountForm() {
       {errors.root?.message && (
         <p className="text-sm text-red-400">⚠ {errors.root.message}</p>
       )}
-      {message !== "" && <p className="text-sm text-green-400">{message}</p>}
     </div>
   );
 }

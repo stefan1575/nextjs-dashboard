@@ -10,6 +10,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const changePasswordFormSchema = z.object({
@@ -23,7 +24,6 @@ export function ChangePasswordForm() {
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors },
     watch,
   } = useForm({
@@ -36,7 +36,6 @@ export function ChangePasswordForm() {
     reValidateMode: "onChange",
   });
 
-  const [message, setMessage] = useState("");
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [oldPassword, newPassword] = watch(["oldPassword", "newPassword"]);
@@ -50,18 +49,15 @@ export function ChangePasswordForm() {
           revokeOtherSessions: true,
         },
         {
-          onRequest: () => {
-            setMessage("");
-          },
           onSuccess: () => {
-            setMessage(
-              "A password reset email has been sent to your inbox. Please follow the instructions to reset your password.",
-            );
+            toast.success("Password Reset Requested", {
+              description:
+                "A password reset email has been sent. Follow the instructions to reset your password.",
+            });
           },
           onError: (ctx) => {
-            setError("root", {
-              type: "custom",
-              message:
+            toast.error("Email Sending Failed", {
+              description:
                 ctx.error.message ??
                 "Something went wrong, please try again later",
             });
@@ -146,9 +142,6 @@ export function ChangePasswordForm() {
           )}
           {errors.root?.message && (
             <p className="text-sm text-red-400">⚠ {errors.root.message}</p>
-          )}
-          {message !== "" && (
-            <p className="text-sm text-green-400">{message}</p>
           )}
         </div>
         {isPending ? (
