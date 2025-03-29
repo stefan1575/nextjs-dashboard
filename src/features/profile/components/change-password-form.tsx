@@ -2,8 +2,15 @@
 
 import { password } from "@/features/authentication/schema";
 import { Button } from "@/shared/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
-import { Label } from "@/shared/components/ui/label";
 import { authClient } from "@/shared/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -21,12 +28,7 @@ const changePasswordFormSchema = z.object({
 type ChangePasswordFormFields = z.infer<typeof changePasswordFormSchema>;
 
 export function ChangePasswordForm() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-  } = useForm({
+  const form = useForm({
     defaultValues: {
       oldPassword: "",
       newPassword: "",
@@ -38,7 +40,6 @@ export function ChangePasswordForm() {
 
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
-  const [oldPassword, newPassword] = watch(["oldPassword", "newPassword"]);
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (values: ChangePasswordFormFields) =>
@@ -80,81 +81,90 @@ export function ChangePasswordForm() {
           }
         </p>
       </div>
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-6">
-        <div className="grid gap-2">
-          <div className="flex items-center">
-            <Label htmlFor="password">Current Password</Label>
-          </div>
-          <div className="relative flex items-center">
-            <Input
-              {...register("oldPassword")}
-              id="oldPassword"
-              className=""
-              type={showOldPassword ? "text" : "password"}
-              placeholder="************"
-              required={newPassword !== ""}
-            />
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={() => setShowOldPassword(!showOldPassword)}
-              className="absolute right-1 bottom-1 h-7 w-7"
-            >
-              {showOldPassword ? <EyeOff /> : <Eye />}
-              <span className="sr-only">Toggle password visibility</span>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="mt-6 space-y-6">
+          <FormField
+            control={form.control}
+            name="oldPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Current Password</FormLabel>
+                <FormControl>
+                  <div className="relative flex items-center">
+                    <Input
+                      type={showOldPassword ? "text" : "password"}
+                      required
+                      {...field}
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setShowOldPassword(!showOldPassword)}
+                      className="absolute right-1 bottom-1 h-7 w-7"
+                    >
+                      {showOldPassword ? (
+                        <EyeOff className="stroke-gray-500" />
+                      ) : (
+                        <Eye className="stroke-gray-500" />
+                      )}
+                      <span className="sr-only">
+                        Toggle password visibility
+                      </span>
+                    </Button>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="newPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>New Password</FormLabel>
+                <FormControl>
+                  <div className="relative flex items-center">
+                    <Input
+                      type={showNewPassword ? "text" : "password"}
+                      required
+                      {...field}
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      className="absolute right-1 bottom-1 h-7 w-7"
+                    >
+                      {showNewPassword ? (
+                        <EyeOff className="stroke-gray-500" />
+                      ) : (
+                        <Eye className="stroke-gray-500" />
+                      )}
+                      <span className="sr-only">
+                        Toggle password visibility
+                      </span>
+                    </Button>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {isPending ? (
+            <Button type="submit" disabled>
+              <Loader2 className="animate-spin" />
+              Loading...
             </Button>
-          </div>
-          {errors.oldPassword?.message && (
-            <p className="text-sm text-red-400">
-              ⚠ {errors.oldPassword.message}
-            </p>
-          )}
-        </div>
-        <div className="grid gap-2">
-          <div className="flex items-center">
-            <Label htmlFor="password">New Password</Label>
-          </div>
-          <div className="relative flex items-center">
-            <Input
-              {...register("newPassword")}
-              id="newPassword"
-              className=""
-              type={showNewPassword ? "text" : "password"}
-              placeholder="************"
-              required={oldPassword !== ""}
-            />
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={() => setShowNewPassword(!showNewPassword)}
-              className="absolute right-1 bottom-1 h-7 w-7"
-            >
-              {showNewPassword ? <EyeOff /> : <Eye />}
-              <span className="sr-only">Toggle password visibility</span>
+          ) : (
+            <Button type="submit" disabled={isPending}>
+              Submit
             </Button>
-          </div>
-          {errors.newPassword?.message && (
-            <p className="text-sm text-red-400">
-              ⚠ {errors.newPassword.message}
-            </p>
           )}
-          {errors.root?.message && (
-            <p className="text-sm text-red-400">⚠ {errors.root.message}</p>
-          )}
-        </div>
-        {isPending ? (
-          <Button type="submit" disabled>
-            <Loader2 className="animate-spin" />
-            Loading...
-          </Button>
-        ) : (
-          <Button type="submit" disabled={isPending}>
-            Submit
-          </Button>
-        )}
-      </form>
+        </form>
+      </Form>
     </div>
   );
 }

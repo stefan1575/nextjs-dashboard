@@ -2,8 +2,15 @@
 
 import { email } from "@/features/authentication/schema";
 import { Button } from "@/shared/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
-import { Label } from "@/shared/components/ui/label";
 import { useSession } from "@/shared/hooks/use-session";
 import { authClient } from "@/shared/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,11 +28,7 @@ type ChangeEmailFormFields = z.infer<typeof changeEmailFormSchema>;
 
 export function ChangeEmailForm() {
   const { user } = useSession();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const form = useForm({
     defaultValues: {
       email: user.email,
     },
@@ -71,25 +74,38 @@ export function ChangeEmailForm() {
           {"Update your account's profile information."}
         </p>
       </div>
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-6">
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input {...register("email")} id="email" type="email" />
-          {errors.email?.message && (
-            <p className="text-sm text-red-400">⚠ {errors.email.message}</p>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="mt-6 space-y-6">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="m@example.com"
+                    type="email"
+                    required
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {isPending ? (
+            <Button type="submit" disabled>
+              <Loader2 className="animate-spin" />
+              Loading...
+            </Button>
+          ) : (
+            <Button type="submit" disabled={isPending}>
+              Submit
+            </Button>
           )}
-        </div>
-        {isPending ? (
-          <Button type="submit" disabled>
-            <Loader2 className="animate-spin" />
-            Loading...
-          </Button>
-        ) : (
-          <Button type="submit" disabled={isPending}>
-            Submit
-          </Button>
-        )}
-      </form>
+        </form>
+      </Form>
     </div>
   );
 }

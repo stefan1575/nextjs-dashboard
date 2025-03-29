@@ -12,8 +12,15 @@ import {
   AlertDialogTrigger,
 } from "@/shared/components/ui/alert-dialog";
 import { Button } from "@/shared/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
-import { Label } from "@/shared/components/ui/label";
 import { authClient } from "@/shared/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -30,11 +37,7 @@ const deleteAccountFormSchema = z.object({
 type DeletePasswordFormFields = z.infer<typeof deleteAccountFormSchema>;
 
 export function DeleteAccountForm() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-  } = useForm({
+  const form = useForm({
     defaultValues: {
       password: "",
     },
@@ -106,60 +109,71 @@ export function DeleteAccountForm() {
             </Button>
           )}
         </AlertDialogTrigger>
-        <AlertDialogContent>
+        <AlertDialogContent className="border-destructive">
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle className="text-destructive">
+              Are you absolutely sure?
+            </AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete your
               account and remove your data from our servers.
             </AlertDialogDescription>
-            <form
-              id="delete-account-form"
-              className="space-y-2 py-2"
-              onSubmit={handleSubmit(onSubmit)}
-            >
-              <div className="flex items-center">
-                <Label htmlFor="password">Current Password</Label>
-              </div>
-              <div className="relative flex items-center">
-                <Input
-                  {...register("password")}
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  required
-                />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-1 bottom-1 h-7 w-7"
-                >
-                  {showPassword ? (
-                    <EyeOff className="stroke-gray-500" />
-                  ) : (
-                    <Eye className="stroke-gray-500" />
+            <Form {...form}>
+              <form
+                id="delete-account-form"
+                className="space-y-2 py-2"
+                onSubmit={form.handleSubmit(onSubmit)}
+              >
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Current Password</FormLabel>
+                      <FormControl>
+                        <div className="relative flex items-center">
+                          <Input
+                            type={showPassword ? "text" : "password"}
+                            required
+                            {...field}
+                          />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-1 bottom-1 h-7 w-7"
+                          >
+                            {showPassword ? (
+                              <EyeOff className="stroke-gray-500" />
+                            ) : (
+                              <Eye className="stroke-gray-500" />
+                            )}
+                            <span className="sr-only">
+                              Toggle password visibility
+                            </span>
+                          </Button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                  <span className="sr-only">Toggle password visibility</span>
-                </Button>
-              </div>
-            </form>
+                />
+              </form>
+            </Form>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               form="delete-account-form"
               type="submit"
-              disabled={!isValid}
+              disabled={!form.formState.isValid}
             >
               Continue
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      {errors.root?.message && (
-        <p className="text-sm text-red-400">⚠ {errors.root.message}</p>
-      )}
     </div>
   );
 }
