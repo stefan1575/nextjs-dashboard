@@ -49,7 +49,7 @@ export function DeleteAccountForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (values: DeletePasswordFormFields) =>
+    mutationFn: async (values: DeletePasswordFormFields) => {
       await authClient.deleteUser(
         {
           password: values.password,
@@ -69,7 +69,8 @@ export function DeleteAccountForm() {
             });
           },
         },
-      ),
+      );
+    },
   });
 
   const onSubmit: SubmitHandler<DeletePasswordFormFields> = (values) => {

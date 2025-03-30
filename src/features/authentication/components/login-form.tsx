@@ -1,5 +1,6 @@
 "use client";
 
+import { AuthFooter } from "@/features/authentication/components/auth-footer";
 import { GoogleButton } from "@/features/authentication/components/google-button";
 import { LoginSchema } from "@/features/authentication/schema";
 import { Button } from "@/shared/components/ui/button";
@@ -112,12 +113,12 @@ export function LoginForm({
                     <FormItem>
                       <div className="flex items-center">
                         <FormLabel>Password</FormLabel>
-                        <a
-                          href="#"
+                        <Link
+                          href="/forgot-password"
                           className="ml-auto text-sm underline-offset-4 hover:underline"
                         >
                           Forgot your password?
-                        </a>
+                        </Link>
                       </div>
                       <FormControl>
                         <div className="relative flex items-center">
@@ -177,10 +178,7 @@ export function LoginForm({
           </Form>
         </CardContent>
       </Card>
-      <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
-      </div>
+      <AuthFooter />
     </div>
   );
 }

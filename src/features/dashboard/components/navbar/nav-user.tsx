@@ -27,14 +27,15 @@ export function NavUser() {
   const { user } = useSession();
 
   const { mutate } = useMutation({
-    mutationFn: async () =>
+    mutationFn: async () => {
       await authClient.signOut({
         fetchOptions: {
           onSuccess: () => {
             router.replace("/login");
           },
         },
-      }),
+      });
+    },
   });
 
   const handleLogOut = async () => {

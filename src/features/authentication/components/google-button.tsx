@@ -7,11 +7,12 @@ import { Loader2 } from "lucide-react";
 
 export function GoogleButton({ children }: { children: React.ReactNode }) {
   const { mutate, isPending } = useMutation({
-    mutationFn: async () =>
+    mutationFn: async () => {
       await authClient.signIn.social({
         provider: "google",
         callbackURL: "/dashboard",
-      }),
+      });
+    },
   });
 
   const handleSignIn = () => {

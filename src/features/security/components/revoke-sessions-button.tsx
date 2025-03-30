@@ -10,11 +10,12 @@ export function RevokeSessionsButton() {
   const router = useRouter();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async () =>
+    mutationFn: async () => {
       await authClient.revokeOtherSessions(
         {},
         { onSuccess: () => router.refresh() },
-      ),
+      );
+    },
   });
 
   const handleRevokeOtherSessions = () => {

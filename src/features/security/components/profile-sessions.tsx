@@ -20,13 +20,14 @@ export function ProfileSession({ sessions }: ProfileSessionProps) {
   const { session: currentSession } = useSession();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (token: token) =>
+    mutationFn: async (token: token) => {
       await authClient.revokeSession(
         { token },
         {
           onSuccess: () => router.refresh(),
         },
-      ),
+      );
+    },
   });
 
   const handleRevokeOtherSessions = async (token: token) => {

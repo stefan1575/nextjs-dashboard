@@ -42,7 +42,7 @@ export function ChangePasswordForm() {
   const [showNewPassword, setShowNewPassword] = useState(false);
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (values: ChangePasswordFormFields) =>
+    mutationFn: async (values: ChangePasswordFormFields) => {
       await authClient.changePassword(
         {
           newPassword: values.newPassword,
@@ -64,7 +64,8 @@ export function ChangePasswordForm() {
             });
           },
         },
-      ),
+      );
+    },
   });
 
   const onSubmit: SubmitHandler<ChangePasswordFormFields> = (values) => {

@@ -38,7 +38,7 @@ export function ChangeEmailForm() {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (values: ChangeEmailFormFields) =>
+    mutationFn: async (values: ChangeEmailFormFields) => {
       await authClient.changeEmail(
         {
           newEmail: values.email,
@@ -46,9 +46,10 @@ export function ChangeEmailForm() {
         },
         {
           onSuccess: () => {
+            const email = user.emailVerified ? user.email : values.email;
+
             toast.success("Email Change Requested", {
-              description:
-                "A confirmation email has been sent to your new address. Please check your inbox to confirm the change.",
+              description: `A confirmation email has been sent to ${email}. Please check your inbox to confirm the change.`,
             });
           },
           onError: (ctx) => {
@@ -59,7 +60,8 @@ export function ChangeEmailForm() {
             });
           },
         },
-      ),
+      );
+    },
   });
 
   const onSubmit: SubmitHandler<ChangeEmailFormFields> = (values) => {

@@ -14,8 +14,8 @@ export const auth = betterAuth({
     sendResetPassword: async ({ user, url }) => {
       await sendEmail({
         to: user.email,
-        subject: "Confirm Your Account Deletion",
-        text: `You have requested to delete your account. To proceed, please confirm by clicking the link below:\n\n${url}\n\nIf you did not request this, please ignore this email.`,
+        subject: "Reset Your Password",
+        text: `A request has been made to reset your password. Click the link below to reset it:\n\n${url}\n\nIf you did not request this, please ignore this email.`,
       });
     },
   },
