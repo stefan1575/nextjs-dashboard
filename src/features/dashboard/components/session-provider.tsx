@@ -1,10 +1,11 @@
 "use client";
 
-import { auth } from "@/shared/lib/auth";
+import { authClient } from "@/shared/lib/auth-client";
+import { useQuery } from "@tanstack/react-query";
 import { createContext } from "react";
 
 type SessionContext = {
-  session: Awaited<ReturnType<typeof auth.api.getSession>>;
+  session: Awaited<ReturnType<typeof authClient.getSession>>;
 };
 
 export const SessionContext = createContext<SessionContext>({
@@ -13,10 +14,22 @@ export const SessionContext = createContext<SessionContext>({
 
 type SessionProviderProps = {
   children: React.ReactNode;
-  session: SessionContext["session"];
 };
 
-export function SessionProvider({ children, session }: SessionProviderProps) {
+export function SessionProvider({ children }: SessionProviderProps) {
+  const { data } = useQuery({
+    queryKey: ["session"],
+    queryFn: async () => {
+      const session = await authClient.getSession();
+      return session;
+    },
+  });
+
+  const session = data?.data;
+  if (!session) {
+    throw Error("Session: session not found.");
+  }
+
   return (
     <SessionContext.Provider value={{ session }}>
       {children}

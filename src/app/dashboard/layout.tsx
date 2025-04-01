@@ -22,7 +22,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <SessionProvider session={session}>
+    <SessionProvider>
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
