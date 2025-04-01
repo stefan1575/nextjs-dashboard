@@ -13,7 +13,7 @@ type sendEmail = {
 
 export async function sendEmail({ to, subject, text }: sendEmail) {
   try {
-    await fetch(process.env.BETTER_AUTH_URL! + "/api/send", {
+    await fetch(process.env.NEXT_PUBLIC_URL! + "/api/send", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
