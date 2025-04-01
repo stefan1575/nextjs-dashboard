@@ -70,6 +70,7 @@ export function LinkGoogleCard() {
             </div>
             {googleAccount ? (
               <SubmitButton
+                type="button"
                 isLoading={isUnlinking}
                 onClick={() => handleUnlinkGoogleAccount()}
               >
@@ -77,6 +78,7 @@ export function LinkGoogleCard() {
               </SubmitButton>
             ) : (
               <SubmitButton
+                type="button"
                 isLoading={isLinking}
                 onClick={() => handleLinkGoogleAccount()}
               >

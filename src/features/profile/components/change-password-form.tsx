@@ -1,6 +1,7 @@
 "use client";
 
 import { password } from "@/features/authentication/schema";
+import { SubmitButton } from "@/shared/components/submit-button";
 import { Button } from "@/shared/components/ui/button";
 import {
   Form,
@@ -16,7 +17,7 @@ import { authClient } from "@/shared/lib/auth-client";
 import { sendEmail } from "@/shared/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -172,16 +173,9 @@ export function ChangePasswordForm() {
               </FormItem>
             )}
           />
-          {isPending ? (
-            <Button type="submit" disabled>
-              <Loader2 className="animate-spin" />
-              Loading...
-            </Button>
-          ) : (
-            <Button type="submit" disabled={isPending}>
-              Submit
-            </Button>
-          )}
+          <SubmitButton type="submit" isLoading={isPending}>
+            Submit
+          </SubmitButton>
         </form>
       </Form>
     </div>

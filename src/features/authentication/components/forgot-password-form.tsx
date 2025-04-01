@@ -1,7 +1,7 @@
 "use client";
 
 import { email } from "@/features/authentication/schema";
-import { Button } from "@/shared/components/ui/button";
+import { SubmitButton } from "@/shared/components/submit-button";
 import {
   Card,
   CardContent,
@@ -23,7 +23,6 @@ import { authClient } from "@/shared/lib/auth-client";
 import { cn } from "@/shared/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -110,16 +109,13 @@ export function ForgotPasswordForm({
                   </FormItem>
                 )}
               />
-              {isPending ? (
-                <Button type="submit" className="w-full" disabled>
-                  <Loader2 className="animate-spin" />
-                  Loading...
-                </Button>
-              ) : (
-                <Button type="submit" className="w-full" disabled={isPending}>
-                  Send reset link
-                </Button>
-              )}
+              <SubmitButton
+                type="submit"
+                className="w-full"
+                isLoading={isPending}
+              >
+                Send reset link
+              </SubmitButton>
             </form>
           </Form>
         </CardContent>

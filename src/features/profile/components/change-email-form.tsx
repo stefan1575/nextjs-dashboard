@@ -1,7 +1,7 @@
 "use client";
 
 import { email } from "@/features/authentication/schema";
-import { Button } from "@/shared/components/ui/button";
+import { SubmitButton } from "@/shared/components/submit-button";
 import {
   Form,
   FormControl,
@@ -15,7 +15,6 @@ import { useSession } from "@/shared/hooks/use-session";
 import { authClient } from "@/shared/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { Loader2 } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -96,16 +95,9 @@ export function ChangeEmailForm() {
               </FormItem>
             )}
           />
-          {isPending ? (
-            <Button type="submit" disabled>
-              <Loader2 className="animate-spin" />
-              Loading...
-            </Button>
-          ) : (
-            <Button type="submit" disabled={isPending}>
-              Submit
-            </Button>
-          )}
+          <SubmitButton type="submit" isLoading={isPending}>
+            Submit
+          </SubmitButton>
         </form>
       </Form>
     </div>

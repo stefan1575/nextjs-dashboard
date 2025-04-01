@@ -2,18 +2,14 @@ import { Button } from "@/shared/components/ui/button";
 import { Loader2 } from "lucide-react";
 import React from "react";
 
-interface SubmitButtonProps {
+interface SubmitButtonProps extends React.ComponentProps<"button"> {
   isLoading: boolean;
-  onClick: () => void;
-  className?: string;
-  children: React.ReactNode;
 }
 
 export function SubmitButton({
   isLoading,
-  onClick,
-  className,
   children,
+  ...props
 }: SubmitButtonProps) {
   return isLoading ? (
     <Button disabled>
@@ -21,7 +17,7 @@ export function SubmitButton({
       Loading...
     </Button>
   ) : (
-    <Button onClick={onClick} disabled={isLoading} className={className}>
+    <Button disabled={isLoading} {...props}>
       {children}
     </Button>
   );

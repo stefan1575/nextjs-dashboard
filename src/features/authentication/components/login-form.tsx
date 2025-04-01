@@ -3,6 +3,7 @@
 import { AuthFooter } from "@/features/authentication/components/auth-footer";
 import { GoogleButton } from "@/features/authentication/components/google-button";
 import { LoginSchema } from "@/features/authentication/schema";
+import { SubmitButton } from "@/shared/components/submit-button";
 import { Button } from "@/shared/components/ui/button";
 import {
   Card,
@@ -24,7 +25,7 @@ import { authClient } from "@/shared/lib/auth-client";
 import { cn } from "@/shared/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -149,16 +150,13 @@ export function LoginForm({
                     </FormItem>
                   )}
                 />
-                {isPending ? (
-                  <Button type="submit" className="w-full" disabled>
-                    <Loader2 className="animate-spin" />
-                    Loading...
-                  </Button>
-                ) : (
-                  <Button type="submit" className="w-full" disabled={isPending}>
-                    Login
-                  </Button>
-                )}
+                <SubmitButton
+                  type="submit"
+                  className="w-full"
+                  isLoading={isPending}
+                >
+                  Login
+                </SubmitButton>
                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
                   <span className="bg-card text-muted-foreground relative z-10 px-2">
                     Or continue with
