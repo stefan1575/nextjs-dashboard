@@ -54,7 +54,7 @@ export function SetPasswordForm() {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (values: SetPasswordFormFields) => {
-      setPassword(values);
+      await setPassword(values);
     },
   });
   const [showPassword, setShowPassword] = useState(false);

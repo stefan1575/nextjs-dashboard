@@ -16,7 +16,7 @@ import { useSession } from "@/shared/hooks/use-session";
 import { authClient } from "@/shared/lib/auth-client";
 import { sendEmail } from "@/shared/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -52,7 +52,7 @@ export function ChangePasswordForm() {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isPending: isMutating } = useMutation({
     mutationFn: async (values: ChangePasswordFormFields) => {
       await authClient.changePassword(
         {
@@ -88,6 +88,22 @@ export function ChangePasswordForm() {
   const onSubmit: SubmitHandler<ChangePasswordFormFields> = (values) => {
     mutate(values);
   };
+
+  const { data, isPending } = useQuery({
+    queryKey: ["accounts"],
+    queryFn: async () => {
+      const accounts = await authClient.listAccounts();
+      return accounts;
+    },
+  });
+
+  const credentialAccount = data?.data?.find(
+    (account) => account.provider === "credential",
+  );
+
+  if (!credentialAccount || isPending) {
+    return null;
+  }
 
   return (
     <div className="space-y-4 rounded-lg border bg-inherit p-8">
@@ -173,7 +189,7 @@ export function ChangePasswordForm() {
               </FormItem>
             )}
           />
-          <SubmitButton type="submit" isLoading={isPending}>
+          <SubmitButton type="submit" isLoading={isMutating}>
             Submit
           </SubmitButton>
         </form>

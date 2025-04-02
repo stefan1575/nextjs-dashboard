@@ -14,7 +14,7 @@ import { Input } from "@/shared/components/ui/input";
 import { useSession } from "@/shared/hooks/use-session";
 import { authClient } from "@/shared/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -36,7 +36,7 @@ export function ChangeEmailForm() {
     reValidateMode: "onChange",
   });
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isPending: isMutating } = useMutation({
     mutationFn: async (values: ChangeEmailFormFields) => {
       await authClient.changeEmail(
         {
@@ -67,6 +67,22 @@ export function ChangeEmailForm() {
     mutate(values);
   };
 
+  const { data, isPending } = useQuery({
+    queryKey: ["accounts"],
+    queryFn: async () => {
+      const accounts = await authClient.listAccounts();
+      return accounts;
+    },
+  });
+
+  const credentialAccount = data?.data?.find(
+    (account) => account.provider === "credential",
+  );
+
+  if (!credentialAccount || isPending) {
+    return null;
+  }
+
   return (
     <div className="space-y-4 rounded-lg border bg-inherit p-8">
       <div className="space-y-0.5">
@@ -95,7 +111,7 @@ export function ChangeEmailForm() {
               </FormItem>
             )}
           />
-          <SubmitButton type="submit" isLoading={isPending}>
+          <SubmitButton type="submit" isLoading={isMutating}>
             Submit
           </SubmitButton>
         </form>
