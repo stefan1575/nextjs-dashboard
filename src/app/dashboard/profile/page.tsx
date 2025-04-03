@@ -7,12 +7,12 @@ import { VerifyEmailCard } from "@/features/profile/components/verify-email-card
 
 export default async function Page() {
   return (
-    <div className="space-y-6 p-0">
+    <div className="space-y-6">
       <VerifyEmailCard />
+      <LinkGoogleCard />
       <SetPasswordForm />
       <ChangeEmailForm />
       <ChangePasswordForm />
-      <LinkGoogleCard />
       <DeleteAccountForm />
     </div>
   );

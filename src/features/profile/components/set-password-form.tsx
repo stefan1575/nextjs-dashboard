@@ -35,11 +35,17 @@ const setPasswordFormSchema = z.object({
 export type SetPasswordFormFields = z.infer<typeof setPasswordFormSchema>;
 
 export function SetPasswordForm() {
-  const { data, isLoading } = useQuery({
+  const { data, isPending: isFetchingAccounts } = useQuery({
     queryKey: ["accounts"],
     queryFn: async () => {
       const accounts = await authClient.listAccounts();
       return accounts;
+    },
+  });
+
+  const { mutate, isPending: isSettingPassword } = useMutation({
+    mutationFn: async (values: SetPasswordFormFields) => {
+      await setPassword(values);
     },
   });
 
@@ -52,11 +58,6 @@ export function SetPasswordForm() {
     reValidateMode: "onChange",
   });
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: async (values: SetPasswordFormFields) => {
-      await setPassword(values);
-    },
-  });
   const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit: SubmitHandler<SetPasswordFormFields> = (values) => {
@@ -67,7 +68,7 @@ export function SetPasswordForm() {
     (account) => account.provider === "credential",
   );
 
-  if (credentialAccount || isLoading) {
+  if (credentialAccount || isFetchingAccounts) {
     return null;
   }
 
@@ -118,7 +119,7 @@ export function SetPasswordForm() {
                 </FormItem>
               )}
             />
-            <SubmitButton isLoading={isPending} type="submit">
+            <SubmitButton isLoading={isSettingPassword} type="submit">
               Submit
             </SubmitButton>
           </form>

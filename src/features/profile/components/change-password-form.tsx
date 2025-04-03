@@ -4,6 +4,13 @@ import { password } from "@/features/authentication/schema";
 import { SubmitButton } from "@/shared/components/submit-button";
 import { Button } from "@/shared/components/ui/button";
 import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/shared/components/ui/card";
+import {
   Form,
   FormControl,
   FormField,
@@ -106,94 +113,96 @@ export function ChangePasswordForm() {
   }
 
   return (
-    <div className="space-y-4 rounded-lg border bg-inherit p-8">
-      <div className="space-y-0.5">
-        <div className="text-lg font-semibold">Update Password</div>
-        <p className="text-muted-foreground hidden text-[0.8rem] md:block">
+    <Card className="bg-inherit px-2 py-8">
+      <CardHeader className="flex flex-col gap-0.5">
+        <CardTitle className="text-lg font-semibold">Update Password</CardTitle>
+        <CardDescription className="text-muted-foreground hidden text-[0.8rem] md:block">
           {
             "Ensure your account is using a long, random password to stay secure."
           }
-        </p>
-      </div>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="mt-6 space-y-6">
-          <FormField
-            control={form.control}
-            name="oldPassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Current Password</FormLabel>
-                <FormControl>
-                  <div className="relative flex items-center">
-                    <Input
-                      type={showOldPassword ? "text" : "password"}
-                      placeholder="Current Password"
-                      required
-                      {...field}
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => setShowOldPassword(!showOldPassword)}
-                      className="absolute right-1 bottom-1 h-7 w-7"
-                    >
-                      {showOldPassword ? (
-                        <EyeOff className="stroke-gray-500" />
-                      ) : (
-                        <Eye className="stroke-gray-500" />
-                      )}
-                      <span className="sr-only">
-                        Toggle password visibility
-                      </span>
-                    </Button>
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="newPassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>New Password</FormLabel>
-                <FormControl>
-                  <div className="relative flex items-center">
-                    <Input
-                      type={showNewPassword ? "text" : "password"}
-                      placeholder="New Password"
-                      required
-                      {...field}
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => setShowNewPassword(!showNewPassword)}
-                      className="absolute right-1 bottom-1 h-7 w-7"
-                    >
-                      {showNewPassword ? (
-                        <EyeOff className="stroke-gray-500" />
-                      ) : (
-                        <Eye className="stroke-gray-500" />
-                      )}
-                      <span className="sr-only">
-                        Toggle password visibility
-                      </span>
-                    </Button>
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <SubmitButton type="submit" isLoading={isMutating}>
-            Submit
-          </SubmitButton>
-        </form>
-      </Form>
-    </div>
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="oldPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Current Password</FormLabel>
+                  <FormControl>
+                    <div className="relative flex items-center">
+                      <Input
+                        type={showOldPassword ? "text" : "password"}
+                        placeholder="Current Password"
+                        required
+                        {...field}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setShowOldPassword(!showOldPassword)}
+                        className="absolute right-1 bottom-1 h-7 w-7"
+                      >
+                        {showOldPassword ? (
+                          <EyeOff className="stroke-gray-500" />
+                        ) : (
+                          <Eye className="stroke-gray-500" />
+                        )}
+                        <span className="sr-only">
+                          Toggle password visibility
+                        </span>
+                      </Button>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="newPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>New Password</FormLabel>
+                  <FormControl>
+                    <div className="relative flex items-center">
+                      <Input
+                        type={showNewPassword ? "text" : "password"}
+                        placeholder="New Password"
+                        required
+                        {...field}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setShowNewPassword(!showNewPassword)}
+                        className="absolute right-1 bottom-1 h-7 w-7"
+                      >
+                        {showNewPassword ? (
+                          <EyeOff className="stroke-gray-500" />
+                        ) : (
+                          <Eye className="stroke-gray-500" />
+                        )}
+                        <span className="sr-only">
+                          Toggle password visibility
+                        </span>
+                      </Button>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <SubmitButton type="submit" isLoading={isMutating}>
+              Submit
+            </SubmitButton>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   );
 }

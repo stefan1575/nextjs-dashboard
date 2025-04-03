@@ -3,6 +3,13 @@
 import { email } from "@/features/authentication/schema";
 import { SubmitButton } from "@/shared/components/submit-button";
 import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/shared/components/ui/card";
+import {
   Form,
   FormControl,
   FormField,
@@ -84,38 +91,40 @@ export function ChangeEmailForm() {
   }
 
   return (
-    <div className="space-y-4 rounded-lg border bg-inherit p-8">
-      <div className="space-y-0.5">
-        <div className="text-lg font-semibold">Update Email</div>
-        <p className="text-muted-foreground hidden text-[0.8rem] md:block">
+    <Card className="bg-inherit px-2 py-8">
+      <CardHeader className="flex flex-col gap-0.5">
+        <CardTitle className="text-lg font-semibold">Update Email</CardTitle>
+        <CardDescription className="text-muted-foreground hidden text-[0.8rem] md:block">
           {"Update your account's profile information."}
-        </p>
-      </div>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="mt-6 space-y-6">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="m@example.com"
-                    type="email"
-                    required
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <SubmitButton type="submit" isLoading={isMutating}>
-            Submit
-          </SubmitButton>
-        </form>
-      </Form>
-    </div>
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="m@example.com"
+                      type="email"
+                      required
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <SubmitButton type="submit" isLoading={isMutating}>
+              Submit
+            </SubmitButton>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   );
 }

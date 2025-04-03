@@ -2,7 +2,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Loader2 } from "lucide-react";
 import React from "react";
 
-interface SubmitButtonProps extends React.ComponentProps<"button"> {
+interface SubmitButtonProps extends React.ComponentProps<typeof Button> {
   isLoading: boolean;
 }
 
@@ -12,7 +12,7 @@ export function SubmitButton({
   ...props
 }: SubmitButtonProps) {
   return isLoading ? (
-    <Button disabled>
+    <Button {...props} disabled>
       <Loader2 className="mr-2 animate-spin" />
       Loading...
     </Button>
