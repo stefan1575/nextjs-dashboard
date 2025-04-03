@@ -1,5 +1,6 @@
 import "./globals.css";
 import { QueryProvider } from "@/features/dashboard/components/query-provider";
+import { Toaster } from "@/shared/components/ui/sonner";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
@@ -29,6 +30,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} dark antialiased`}
       >
         <QueryProvider>{children}</QueryProvider>
+        <Toaster richColors closeButton />
       </body>
     </html>
   );

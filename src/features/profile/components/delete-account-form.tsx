@@ -12,15 +12,29 @@ import {
   AlertDialogTrigger,
 } from "@/shared/components/ui/alert-dialog";
 import { Button } from "@/shared/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/shared/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
-import { Label } from "@/shared/components/ui/label";
 import { authClient } from "@/shared/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const deleteAccountFormSchema = z.object({
@@ -30,12 +44,7 @@ const deleteAccountFormSchema = z.object({
 type DeletePasswordFormFields = z.infer<typeof deleteAccountFormSchema>;
 
 export function DeleteAccountForm() {
-  const {
-    register,
-    handleSubmit,
-    setError,
-    formState: { errors, isValid },
-  } = useForm({
+  const form = useForm({
     defaultValues: {
       password: "",
     },
@@ -46,28 +55,29 @@ export function DeleteAccountForm() {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const router = useRouter();
-
   const { mutate, isPending } = useMutation({
-    mutationFn: async (values: DeletePasswordFormFields) =>
+    mutationFn: async (values: DeletePasswordFormFields) => {
       await authClient.deleteUser(
         {
           password: values.password,
         },
         {
           onSuccess: () => {
-            router.push("/login");
+            toast.success("Account Deletion Requested", {
+              description:
+                "A confirmation email has been sent. Please check your inbox to proceed with account deletion.",
+            });
           },
           onError: (ctx) => {
-            setError("root", {
-              type: "custom",
-              message:
+            toast.error("Email Sending Failed", {
+              description:
                 ctx.error.message ??
                 "Something went wrong, please try again later",
             });
           },
         },
-      ),
+      );
+    },
   });
 
   const onSubmit: SubmitHandler<DeletePasswordFormFields> = (values) => {
@@ -75,21 +85,23 @@ export function DeleteAccountForm() {
   };
 
   return (
-    <div className="max-w-7xl">
-      <div className="space-y-4 rounded-lg border bg-inherit p-8">
-        <div className="space-y-0.5">
-          <div className="text-lg font-semibold">Delete Account</div>
-          <p className="text-muted-foreground text-[0.8rem]">
-            {
-              "Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain."
-            }
-          </p>
-        </div>
+    <Card className="border-destructive bg-inherit px-2 py-8">
+      <CardHeader className="flex flex-col gap-0.5">
+        <CardTitle className="text-destructive text-lg font-semibold">
+          Delete Account{" "}
+        </CardTitle>
+        <CardDescription className="text-muted-foreground hidden text-[0.8rem] md:block">
+          {
+            "Once you delete your account, there is no going back. Please be certain."
+          }
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
         <AlertDialog>
           <AlertDialogTrigger asChild>
             {isPending ? (
               <Button
-                className="text-xs font-semibold tracking-widest"
+                className="font-semibold"
                 variant="destructive"
                 type="button"
                 disabled
@@ -98,69 +110,80 @@ export function DeleteAccountForm() {
               </Button>
             ) : (
               <Button
-                className="text-xs font-semibold tracking-widest"
+                className="font-semibold"
                 variant="destructive"
                 type="button"
               >
-                DELETE ACCOUNT
+                Delete your account
               </Button>
             )}
           </AlertDialogTrigger>
-          <AlertDialogContent>
+          <AlertDialogContent className="border-destructive">
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogTitle className="text-destructive">
+                Are you absolutely sure?
+              </AlertDialogTitle>
               <AlertDialogDescription>
                 This action cannot be undone. This will permanently delete your
                 account and remove your data from our servers.
               </AlertDialogDescription>
-              <form
-                id="delete-account-form"
-                className="space-y-2 py-2"
-                onSubmit={handleSubmit(onSubmit)}
-              >
-                <div className="flex items-center">
-                  <Label htmlFor="password">Current Password</Label>
-                </div>
-                <div className="relative flex items-center">
-                  <Input
-                    {...register("password")}
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    required
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-1 bottom-1 h-7 w-7"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="stroke-gray-500" />
-                    ) : (
-                      <Eye className="stroke-gray-500" />
+              <Form {...form}>
+                <form
+                  id="delete-account-form"
+                  className="space-y-2 py-2"
+                  onSubmit={form.handleSubmit(onSubmit)}
+                >
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Current Password</FormLabel>
+                        <FormControl>
+                          <div className="relative flex items-center">
+                            <Input
+                              type={showPassword ? "text" : "password"}
+                              required
+                              {...field}
+                            />
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => setShowPassword(!showPassword)}
+                              className="absolute right-1 bottom-1 h-7 w-7"
+                            >
+                              {showPassword ? (
+                                <EyeOff className="stroke-gray-500" />
+                              ) : (
+                                <Eye className="stroke-gray-500" />
+                              )}
+                              <span className="sr-only">
+                                Toggle password visibility
+                              </span>
+                            </Button>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
                     )}
-                    <span className="sr-only">Toggle password visibility</span>
-                  </Button>
-                </div>
-              </form>
+                  />
+                </form>
+              </Form>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction
                 form="delete-account-form"
                 type="submit"
-                disabled={!isValid}
+                disabled={!form.formState.isValid}
               >
                 Continue
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-        {errors.root?.message && (
-          <p className="text-sm text-red-400">⚠ {errors.root.message}</p>
-        )}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
