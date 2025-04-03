@@ -13,6 +13,13 @@ import {
 } from "@/shared/components/ui/alert-dialog";
 import { Button } from "@/shared/components/ui/button";
 import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/shared/components/ui/card";
+import {
   Form,
   FormControl,
   FormField,
@@ -78,103 +85,105 @@ export function DeleteAccountForm() {
   };
 
   return (
-    <div className="border-destructive space-y-4 rounded-lg border bg-inherit p-8">
-      <div className="space-y-0.5">
-        <div className="text-destructive text-lg font-semibold">
-          Delete Account
-        </div>
-        <p className="text-muted-foreground text-[0.8rem]">
+    <Card className="border-destructive bg-inherit px-2 py-8">
+      <CardHeader className="flex flex-col gap-0.5">
+        <CardTitle className="text-destructive text-lg font-semibold">
+          Delete Account{" "}
+        </CardTitle>
+        <CardDescription className="text-muted-foreground hidden text-[0.8rem] md:block">
           {
             "Once you delete your account, there is no going back. Please be certain."
           }
-        </p>
-      </div>
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          {isPending ? (
-            <Button
-              className="font-semibold"
-              variant="destructive"
-              type="button"
-              disabled
-            >
-              <Loader2 className="animate-spin" /> Loading...
-            </Button>
-          ) : (
-            <Button
-              className="font-semibold"
-              variant="destructive"
-              type="button"
-            >
-              Delete your account
-            </Button>
-          )}
-        </AlertDialogTrigger>
-        <AlertDialogContent className="border-destructive">
-          <AlertDialogHeader>
-            <AlertDialogTitle className="text-destructive">
-              Are you absolutely sure?
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
-            </AlertDialogDescription>
-            <Form {...form}>
-              <form
-                id="delete-account-form"
-                className="space-y-2 py-2"
-                onSubmit={form.handleSubmit(onSubmit)}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            {isPending ? (
+              <Button
+                className="font-semibold"
+                variant="destructive"
+                type="button"
+                disabled
               >
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Current Password</FormLabel>
-                      <FormControl>
-                        <div className="relative flex items-center">
-                          <Input
-                            type={showPassword ? "text" : "password"}
-                            required
-                            {...field}
-                          />
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-1 bottom-1 h-7 w-7"
-                          >
-                            {showPassword ? (
-                              <EyeOff className="stroke-gray-500" />
-                            ) : (
-                              <Eye className="stroke-gray-500" />
-                            )}
-                            <span className="sr-only">
-                              Toggle password visibility
-                            </span>
-                          </Button>
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </form>
-            </Form>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              form="delete-account-form"
-              type="submit"
-              disabled={!form.formState.isValid}
-            >
-              Continue
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
+                <Loader2 className="animate-spin" /> Loading...
+              </Button>
+            ) : (
+              <Button
+                className="font-semibold"
+                variant="destructive"
+                type="button"
+              >
+                Delete your account
+              </Button>
+            )}
+          </AlertDialogTrigger>
+          <AlertDialogContent className="border-destructive">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-destructive">
+                Are you absolutely sure?
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete your
+                account and remove your data from our servers.
+              </AlertDialogDescription>
+              <Form {...form}>
+                <form
+                  id="delete-account-form"
+                  className="space-y-2 py-2"
+                  onSubmit={form.handleSubmit(onSubmit)}
+                >
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Current Password</FormLabel>
+                        <FormControl>
+                          <div className="relative flex items-center">
+                            <Input
+                              type={showPassword ? "text" : "password"}
+                              required
+                              {...field}
+                            />
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => setShowPassword(!showPassword)}
+                              className="absolute right-1 bottom-1 h-7 w-7"
+                            >
+                              {showPassword ? (
+                                <EyeOff className="stroke-gray-500" />
+                              ) : (
+                                <Eye className="stroke-gray-500" />
+                              )}
+                              <span className="sr-only">
+                                Toggle password visibility
+                              </span>
+                            </Button>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </form>
+              </Form>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                form="delete-account-form"
+                type="submit"
+                disabled={!form.formState.isValid}
+              >
+                Continue
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </CardContent>
+    </Card>
   );
 }
