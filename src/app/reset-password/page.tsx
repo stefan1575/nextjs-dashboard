@@ -3,14 +3,14 @@ import { Logo } from "@/shared/components/logo";
 import { redirect } from "next/navigation";
 import type React from "react";
 
-export default function ResetPassword({
+export default async function ResetPassword({
   searchParams,
 }: {
-  searchParams: { token?: string };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const token = searchParams.token;
+  const token = (await searchParams).token;
 
-  if (!token) {
+  if (!token || typeof token !== "string") {
     redirect("/login");
   }
 
