@@ -12,15 +12,14 @@ import {
 import { useSession } from "@/shared/hooks/use-session";
 import { auth } from "@/shared/lib/auth";
 import { authClient } from "@/shared/lib/auth-client";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Laptop, TabletSmartphone } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { UAParser } from "ua-parser-js";
 
 type token = typeof auth.$Infer.Session.session.token;
 
 export function ProfileSession() {
-  const router = useRouter();
   const { session: currentSession } = useSession();
 
   const { data, isPending } = useQuery({
@@ -31,13 +30,20 @@ export function ProfileSession() {
     },
   });
 
+  const queryClient = useQueryClient();
+
   const { mutate, isPending: isRevoking } = useMutation({
-    mutationKey: ["revokeSession", data],
     mutationFn: async (token: token) => {
       await authClient.revokeSession(
         { token },
         {
-          onSuccess: () => router.refresh(),
+          onSuccess: () => {
+            toast.success("Session Successfully Revoked", {
+              description: "Your session from another device has been revoked.",
+            });
+
+            queryClient.invalidateQueries({ queryKey: ["sessions"] });
+          },
         },
       );
     },

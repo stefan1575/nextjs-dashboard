@@ -11,6 +11,7 @@ import {
 } from "@/shared/components/ui/card";
 import { authClient } from "@/shared/lib/auth-client";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export function LinkGoogleCard() {
@@ -22,8 +23,9 @@ export function LinkGoogleCard() {
     },
   });
 
+  const queryClient = useQueryClient();
+
   const { mutate: linkGoogleAccount, isPending: isLinking } = useMutation({
-    mutationKey: ["linkGoogleAccount", data],
     mutationFn: async () => {
       await authClient.linkSocial({
         provider: "google",
@@ -33,7 +35,6 @@ export function LinkGoogleCard() {
   });
 
   const { mutate: unlinkGoogleAccount, isPending: isUnlinking } = useMutation({
-    mutationKey: ["unlinkGoogleAccount", data],
     mutationFn: async () => {
       await authClient.unlinkAccount(
         {
@@ -45,6 +46,8 @@ export function LinkGoogleCard() {
               description:
                 "Your Google account has been successfully unlinked.",
             });
+
+            queryClient.invalidateQueries({ queryKey: ["accounts"] });
           },
           onError: async (ctx) => {
             toast.error("Google Account Unlinking Failed", {
