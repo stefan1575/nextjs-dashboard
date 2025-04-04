@@ -85,7 +85,7 @@ export function DeleteAccountForm() {
   };
 
   return (
-    <Card className="border-destructive bg-inherit px-2 py-8">
+    <Card className="border-destructive bg-inherit px-0 py-6 md:px-2 md:py-8">
       <CardHeader className="flex flex-col gap-0.5">
         <CardTitle className="text-destructive text-lg font-semibold">
           Delete Account{" "}

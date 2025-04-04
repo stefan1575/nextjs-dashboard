@@ -14,7 +14,16 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export function LinkGoogleCard() {
+  const { data, isPending } = useQuery({
+    queryKey: ["accounts"],
+    queryFn: async () => {
+      const accounts = await authClient.listAccounts();
+      return accounts;
+    },
+  });
+
   const { mutate: linkGoogleAccount, isPending: isLinking } = useMutation({
+    mutationKey: ["linkGoogleAccount", data],
     mutationFn: async () => {
       await authClient.linkSocial({
         provider: "google",
@@ -24,6 +33,7 @@ export function LinkGoogleCard() {
   });
 
   const { mutate: unlinkGoogleAccount, isPending: isUnlinking } = useMutation({
+    mutationKey: ["unlinkGoogleAccount", data],
     mutationFn: async () => {
       await authClient.unlinkAccount(
         {
@@ -48,14 +58,6 @@ export function LinkGoogleCard() {
     },
   });
 
-  const { data, isPending } = useQuery({
-    queryKey: ["accounts"],
-    queryFn: async () => {
-      const accounts = await authClient.listAccounts();
-      return accounts;
-    },
-  });
-
   const googleAccount = data?.data?.find(
     (account) => account.provider === "google",
   );
@@ -74,7 +76,7 @@ export function LinkGoogleCard() {
 
   if (isPending) {
     return (
-      <Card className="bg-inherit px-2 py-8">
+      <Card className="bg-inherit px-0 py-6 md:px-2 md:py-8">
         <CardHeader className="flex flex-col gap-0.5">
           <div className="h-6 w-24 animate-pulse rounded-md bg-gray-200" />
           <div className="hidden h-4 w-64 animate-pulse rounded-md bg-gray-200 md:block" />
@@ -93,7 +95,7 @@ export function LinkGoogleCard() {
   }
 
   return (
-    <Card className="bg-inherit px-2 py-8">
+    <Card className="bg-inherit px-0 py-6 md:px-2 md:py-8">
       <CardHeader className="flex flex-col gap-0.5">
         <CardTitle className="text-lg font-semibold">Providers</CardTitle>
         <CardDescription className="text-muted-foreground hidden text-[0.8rem] md:block">

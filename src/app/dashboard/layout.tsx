@@ -27,7 +27,7 @@ export default async function DashboardLayout({
         <AppSidebar />
         <SidebarInset>
           <AppNavbar />
-          <div className="flex flex-1 flex-col gap-4 p-4">
+          <div className="flex flex-1 flex-col gap-4 p-0 md:p-4">
             <Suspense fallback={<DashboardSkeleton />}>{children}</Suspense>
           </div>
         </SidebarInset>

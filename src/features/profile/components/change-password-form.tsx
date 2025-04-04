@@ -113,7 +113,7 @@ export function ChangePasswordForm() {
   }
 
   return (
-    <Card className="bg-inherit px-2 py-8">
+    <Card className="bg-inherit px-0 py-6 md:px-2 md:py-8">
       <CardHeader className="flex flex-col gap-0.5">
         <CardTitle className="text-lg font-semibold">Update Password</CardTitle>
         <CardDescription className="text-muted-foreground hidden text-[0.8rem] md:block">

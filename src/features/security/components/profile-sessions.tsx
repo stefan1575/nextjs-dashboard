@@ -1,6 +1,5 @@
 "use client";
 
-import { RevokeSessionsButton } from "@/features/security/components/revoke-sessions-button";
 import { SubmitButton } from "@/shared/components/submit-button";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -24,7 +23,16 @@ export function ProfileSession() {
   const router = useRouter();
   const { session: currentSession } = useSession();
 
+  const { data, isPending } = useQuery({
+    queryKey: ["sessions"],
+    queryFn: async () => {
+      const sessions = await authClient.listSessions();
+      return sessions;
+    },
+  });
+
   const { mutate, isPending: isRevoking } = useMutation({
+    mutationKey: ["revokeSession", data],
     mutationFn: async (token: token) => {
       await authClient.revokeSession(
         { token },
@@ -32,14 +40,6 @@ export function ProfileSession() {
           onSuccess: () => router.refresh(),
         },
       );
-    },
-  });
-
-  const { data, isPending } = useQuery({
-    queryKey: ["sessions"],
-    queryFn: async () => {
-      const sessions = await authClient.listSessions();
-      return sessions;
     },
   });
 
@@ -54,7 +54,7 @@ export function ProfileSession() {
   }
 
   return (
-    <Card className="bg-inherit px-2 py-8">
+    <Card className="bg-inherit px-0 py-6 md:px-2 md:py-8">
       <CardHeader className="flex items-center justify-between gap-0.5">
         <div>
           <CardTitle className="text-lg font-semibold">Sessions</CardTitle>
@@ -62,7 +62,6 @@ export function ProfileSession() {
             {"Update your account's profile information."}
           </CardDescription>
         </div>
-        <RevokeSessionsButton />
       </CardHeader>
       <CardContent className="space-y-4">
         {sessions.map((session) => {
@@ -85,11 +84,11 @@ export function ProfileSession() {
                 </div>
                 {session.token === currentSession.token ? (
                   <Button
-                    className="text-muted-foreground hover:bg-background hover:text-muted-foreground dark:bg-background hover:dark:bg-background hidden md:block"
+                    className="text-muted-foreground hover:bg-background hover:text-muted-foreground dark:bg-background hover:dark:bg-background"
                     variant="outline"
                     type="button"
                   >
-                    Current Session
+                    Current<span className="hidden md:block">Session</span>
                   </Button>
                 ) : (
                   <SubmitButton

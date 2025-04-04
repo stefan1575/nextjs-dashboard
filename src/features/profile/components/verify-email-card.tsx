@@ -44,7 +44,7 @@ export function VerifyEmailCard() {
   }
 
   return (
-    <div className="space-y-4 rounded-lg border border-amber-200 bg-amber-50 p-8 text-sm dark:border-amber-800 dark:bg-amber-950/30">
+    <div className="space-y-4 rounded-lg border border-amber-200 bg-amber-50 p-6 text-sm md:p-8 dark:border-amber-800 dark:bg-amber-950/30">
       <div className="flex items-center gap-2">
         <AlertCircle className="h-4 w-4 text-amber-500 dark:text-amber-400" />
         <span className="font-medium text-amber-800 dark:text-amber-300">
