@@ -15,7 +15,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export function LinkGoogleCard() {
-  const { data, isPending } = useQuery({
+  const { data } = useQuery({
     queryKey: ["accounts"],
     queryFn: async () => {
       const accounts = await authClient.listAccounts();
@@ -75,26 +75,6 @@ export function LinkGoogleCard() {
 
   function handleUnlinkGoogleAccount() {
     unlinkGoogleAccount();
-  }
-
-  if (isPending) {
-    return (
-      <Card className="bg-inherit px-0 py-6 md:px-2 md:py-8">
-        <CardHeader className="flex flex-col gap-0.5">
-          <div className="h-6 w-24 animate-pulse rounded-md bg-gray-200" />
-          <div className="hidden h-4 w-64 animate-pulse rounded-md bg-gray-200 md:block" />
-        </CardHeader>
-        <CardContent>
-          <Card className="flex flex-row items-center justify-between bg-inherit p-6">
-            <div className="flex flex-row items-center gap-2">
-              <div className="size-6 animate-pulse rounded-full bg-gray-200" />
-              <div className="h-5 w-16 animate-pulse rounded-md bg-gray-200" />
-            </div>
-            <div className="h-9 w-20 animate-pulse rounded-md bg-gray-200" />
-          </Card>
-        </CardContent>
-      </Card>
-    );
   }
 
   return (

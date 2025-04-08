@@ -5,7 +5,7 @@ import { LinkGoogleCard } from "@/features/profile/components/link-google-card";
 import { SetPasswordForm } from "@/features/profile/components/set-password-form";
 import { VerifyEmailCard } from "@/features/profile/components/verify-email-card";
 
-export default async function Page() {
+export default function Page() {
   return (
     <div className="space-y-6">
       <VerifyEmailCard />
