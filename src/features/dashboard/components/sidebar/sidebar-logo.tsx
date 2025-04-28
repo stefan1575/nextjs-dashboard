@@ -2,16 +2,26 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/shared/components/ui/sidebar";
 import { GalleryVerticalEnd } from "lucide-react";
 import Link from "next/link";
 
 export function SidebarLogo() {
+  const { openMobile, setOpenMobile, isMobile } = useSidebar();
+
+  const toggleMobileSidebar = () => {
+    if (isMobile) {
+      setOpenMobile(!openMobile);
+    }
+  };
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
         <SidebarMenuButton
           size="lg"
+          onClick={toggleMobileSidebar}
           className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-inherit active:bg-inherit"
           asChild
         >

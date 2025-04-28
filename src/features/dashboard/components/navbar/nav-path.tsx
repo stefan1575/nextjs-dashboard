@@ -18,7 +18,7 @@ export function NavPath() {
   const segments = pathname.split("/").filter(Boolean);
 
   return (
-    <Breadcrumb>
+    <Breadcrumb className="hidden md:block">
       <BreadcrumbList>
         {segments.map((segment, index) => {
           // Create the path for this segment

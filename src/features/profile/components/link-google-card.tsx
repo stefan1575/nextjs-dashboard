@@ -89,7 +89,7 @@ export function LinkGoogleCard() {
         <Card className="flex flex-row items-center justify-between bg-inherit p-6">
           <div className="flex flex-row items-center gap-2">
             <GoogleLogo className="size-6" />
-            <span className="text">Google</span>
+            <span className="font-semibold">Google</span>
           </div>
           {!googleAccount ? (
             <SubmitButton
